@@ -328,7 +328,7 @@
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 16:57:40" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:28" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -367,505 +367,14 @@
 
       
         
-          
-            <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code><br><strong>JavaScript 是一个缺乏标准库的语言。</strong>当你想解决 URL 处理、日期处理这类很常见的问题，在没有标准库的情况下就只能自己动手写代码或者从自己以前的工程中拷贝代码。而使用 npm 等包管理器最大的好处是里面有很多非常成熟的包来解决这类问题，可以直接安装到项目中使用，给开发工作带来了很大的便利。</p>
-<h4 id="万能修复大法？rm-rf-node-modules-amp-amp-npm-i"><a href="#万能修复大法？rm-rf-node-modules-amp-amp-npm-i" class="headerlink" title="万能修复大法？rm -rf node_modules &amp;&amp; npm i"></a>万能修复大法？rm -rf node_modules &amp;&amp; npm i</h4><p>很多开发同学在使用 npm 的时候一发现 npm 模块有问题就执行  <code>rm -rf node_modules &amp;&amp; npm i</code>，一些情况下可以解决问题，一些情况下却不能，让我们尝试去看看这是为什么。当我们执行  <code>npm install</code>  或者  <code>yarn</code>  来安装模块的时候，大概经历了几个过程：</p>
-<ol>
-<li>首先会寻找<strong>包版本信息文件</strong>（ pakcage-lock.json，yarn.lock 等），如果发现有版本信息文件，则依照它来进行模块安装。</li>
-<li>检查 pakcage.json 中的依赖，如果此时项目中不存在<strong>版本信息文件</strong>，则完全按照 pakcage.json 进行安装，并生成一个版本信息文件。如果此时存在版本信息文件，<strong>则只会安装 package.json 中有而版本信息文件中没有的包</strong>。</li>
-<li>如果确实有这种新包，则更新版本信息文件。因此当我们发现项目中的某个包和我们预想不一致时，<strong>首先查看版本信息文件中该包的来源和版本</strong>，因为在安装过程中它的优先级最高。有的时候执行了  <code>rm -rf node_modules &amp;&amp; npm i</code>  也没有解决问题，可能是由于版本信息文件中这个包本身就有问题，无论你怎么删掉重装也还是一样。</li>
-</ol>
-<h4 id="不知道包怎么来的？试试-yarn-why"><a href="#不知道包怎么来的？试试-yarn-why" class="headerlink" title="不知道包怎么来的？试试 yarn why"></a>不知道包怎么来的？试试 yarn why</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">➜  CubeManage git:(master) ✗ yarn why lodash</span><br><span class="line">yarn why v1.5.1</span><br><span class="line">[1/4] 🤔  Why <span class="keyword">do</span> we have the module <span class="string">"lodash"</span>...?</span><br><span class="line">[2/4] 🚚  Initialising dependency graph...</span><br><span class="line">[3/4] 🔍  Finding dependency...</span><br><span class="line">[4/4] 🚡  Calculating file sizes...</span><br><span class="line">=&gt; Found <span class="string">"lodash@4.17.5"</span></span><br><span class="line">info Has been hoisted to <span class="string">"lodash"</span></span><br><span class="line">info Reasons this module exists</span><br><span class="line">   - Specified <span class="keyword">in</span> <span class="string">"dependencies"</span></span><br><span class="line">   - Hoisted from <span class="string">"eslint#lodash"</span></span><br><span class="line">   - Hoisted from <span class="string">"karma-webpack#lodash"</span></span><br><span class="line">   - Hoisted from <span class="string">"karma-phantomjs-launcher#lodash"</span></span><br><span class="line">   - Hoisted from <span class="string">"async#lodash"</span></span><br></pre></td></tr></table></figure>
-<h4 id="搭建内网-npm-仓库"><a href="#搭建内网-npm-仓库" class="headerlink" title="搭建内网 npm 仓库"></a>搭建内网 npm 仓库</h4><p>在日常开发中，很多公司内部的包我们不希望发布到 npm 官方仓库，因为里面可能涉及一些不希望暴露给外部的代码。这时我们可以选择在公司内网搭建 npm 私有仓库。借助 npm 的  <code>scope</code>  特性我们可以实现公有和私有包的区分，在为 npm 包设定名字的时候可以加上  <code>scope</code>。<strong>它的格式是&nbsp;</strong><code><strong>@somescope/somepackagename</strong></code>，比如公司内部的包命名可以为  <code>@mynpm/myui</code>，这种包只能上传到私有仓库，官方仓库是不接受的。现在比较主流的解决方案有  <code>cnpm</code>  和  <code>verdaccio</code>。两者的区别主要在于同步官方仓库包的机制：</p>
-<ul>
-<li><code>cnpm</code>  的机制把所有官方仓库的包拷贝到私有仓库中，然后每隔几分钟从官方仓库中同步一次。这样的优点是用户下载包会比较快，缺点是包刚发布上去可能需要等待几分钟来同步或者去手动同步。另外就是对硬盘要有一定要求，毕竟全球那么多 JavaScript 开发者每天都在发布无数的包上去，都需要去同步到内网仓库中。</li>
-<li><code>verdaccio</code>  相对来说则智能一些。它并不会主动拷贝和同步官方源的包，只有在用户去安装包的时候才从官方的仓库拉取，并在本地生成缓存。经过验证在一段时间之后它的缓存命中率是非常高的，因为用户在绝大多数情况下都在安装同样的包。以上通过区分内外网仓库，可以防止内部的包泄露到外网中。</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/npm-custom-init/" itemprop="url">
-                  npm init 解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:07:29" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
-<p>将会使用默认值配置;</p>
-<h4 id="如何修改默认值"><a href="#如何修改默认值" class="headerlink" title="如何修改默认值?"></a>如何修改默认值?</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> init.author.email <span class="string">"lhongda@live.com"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.author.name <span class="string">"anderson"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.author.url <span class="string">"http://github.com/peacesky"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.license <span class="string">"MIT"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.version <span class="string">"0.1.0"</span></span><br></pre></td></tr></table></figure>
-<h4 id="npm-run-的实际执行过程"><a href="#npm-run-的实际执行过程" class="headerlink" title="npm run 的实际执行过程:"></a>npm run 的实际执行过程:</h4><ol>
-<li>从 package.json 文件中读取 scripts 对象里面的全部配置；</li>
-<li>以传给 npm run 的第一个参数作为键，本例中为 xxx，在 scripts 对象里面获取对应的值作为接下来要执行的命令，如果没找到直接报错；</li>
-<li>在系统默认的 shell 中执行上述命令，系统默认 shell 通常是 bash，windows 环境下可能略有不同.</li>
-</ol>
-<h4 id="上下文的-eslint-命令从哪里来"><a href="#上下文的-eslint-命令从哪里来" class="headerlink" title="上下文的 eslint 命令从哪里来"></a>上下文的 eslint 命令从哪里来</h4><p>其实，npm 在执行指定 script 之前会把 node_modules/.bin 加到环境变量 $PATH 的前面，这意味着任何内含可执行文件的 npm 依赖都可以在 npm script 中直接调用，换句话说，你不需要在 npm script 中加上可执行文件的完整路径，比如 <code>./node_modules/.bin/eslint **.js</code> .</p>
-<h4 id="Cli-初始化-eslint"><a href="#Cli-初始化-eslint" class="headerlink" title="Cli 初始化 eslint"></a>Cli 初始化 eslint</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">➜  npm-custom-init git:(master) ✗ npm install eslint -D</span><br><span class="line">➜  npm-custom-init git:(master) ✗ ./node_modules/.bin/eslint --init</span><br><span class="line">? How would you like to configure ESLint? Answer questions about your style</span><br><span class="line">? Are you using ECMAScript 6 features? Yes</span><br><span class="line">? Are you using ES6 modules? Yes</span><br><span class="line">? Where will your code run? Browser</span><br><span class="line">? Do you use CommonJS? No</span><br><span class="line">? Do you use JSX? No</span><br><span class="line">? What style of indentation <span class="keyword">do</span> you use? Tabs</span><br><span class="line">? What quotes <span class="keyword">do</span> you use <span class="keyword">for</span> strings? Single</span><br><span class="line">? What line endings <span class="keyword">do</span> you use? Unix</span><br><span class="line">? Do you require semicolons? Yes</span><br><span class="line">? What format <span class="keyword">do</span> you want your config file to be <span class="keyword">in</span>? JavaScript</span><br><span class="line">Successfully created .eslintrc.js file <span class="keyword">in</span> /Users/anderson/Code/lang-experiments/js/npm/npm-custom-init</span><br></pre></td></tr></table></figure>
-<h4 id="配置-Vue-React-eslint"><a href="#配置-Vue-React-eslint" class="headerlink" title="配置 Vue/React eslint"></a>配置 Vue/React eslint</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/vuejs/eslint-plugin-vue</span><br><span class="line">https://github.com/yannickcr/eslint-plugin-react</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Use webpack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/Use webpack/" itemprop="url">
-                  为什么要使用Webpack
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 16:58:34" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack前端工程化入门》</a><code></code></p>
-<p><img src="https://cdn.yuque.com/yuque/2018/png/95485/1523526490084-e6add3e6-1931-4581-ab12-d43e94227175.png" alt="图片.png | left | 665x347"></p>
-<p>对于 JavaScript 应用来说，现在市面上可以选择的打包和构建工具有很多：Gulp、Grunt、Browserify、Webpack、Rollup 等等。<br>如果我们大概分一下类的话:</p>
-<ul>
-<li>Gulp、Grunt 它们是属于构建流程管理工具，也就是通过定义和执行任务来完成构建工作。这些任务可以包括预编译语言的处理、模块打包、代码压缩等等，开发者可以利用 Gulp、Grunt 以及它们周边的插件去做很多事情。</li>
-<li>Browserify、Webpack、Rollup 则属于打包工具，核心的功能就是把模块按照特定模块规则合并到一起，使浏览器可以执行。<ul>
-<li>Rollup 主要是面向库的打包工具，本文不会过多涉及。</li>
-<li>而 Browserify 和 Webpack 对比起来，Webpack 的功能要更强大一些。它支持 AMD、CommonJS、ES6 Module 多种模块系统，也可以通过 loader 和 plugin 来进行预编译语言的处理、代码压缩等等。而 Webpack 最主要的优势在于可以进行代码按需加载（ code spliting ），使构建速度和用户体验均可以得到提升，在后面我们会详细介绍。</li>
-</ul>
-</li>
-</ul>
-<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir yarn-webpack-bundle &amp;&amp; <span class="built_in">cd</span> yarn-webpack-bundle</span><br><span class="line">yarn init</span><br><span class="line">yarn add -D webpack webpack-cli webpack-dev-server</span><br></pre></td></tr></table></figure>
-<p>创建几个文件,如下:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  yarn-webpack-bundle git:(master) ✗ tree -L 1</span><br><span class="line">.</span><br><span class="line">├── app.js</span><br><span class="line">├── index.html</span><br><span class="line">├── module.js</span><br><span class="line">├── node_modules</span><br><span class="line">├── package.json</span><br><span class="line">├── webpack.config.js</span><br><span class="line">└── yarn.lock</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="keyword">import</span> moduleLog <span class="keyword">from</span> <span class="string">'./module.js'</span>;</span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">'app.js loaded.'</span>);</span><br><span class="line">moduleLog();</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// module.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.write(<span class="string">'module.js loaded.'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// index.html</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"dist/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./app.js'</span>,</span><br><span class="line">  mode: <span class="string">'development'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">      path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'bundle.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    port: <span class="number">3000</span>,</span><br><span class="line">    publicPath: <span class="string">"/dist/"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>启动webpack-dev-server:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">➜  yarn-webpack-bundle git:(master) ✗ ./node_modules/.bin/webpack-dev-server </span><br><span class="line">ℹ ｢wds｣: Project is running at http://localhost:3000/</span><br><span class="line">ℹ ｢wds｣: webpack output is served from /dist/</span><br><span class="line">ℹ ｢wdm｣: Hash: 47d5e6fd0a92dd3b4769</span><br><span class="line">Version: webpack 4.5.0</span><br><span class="line">Time: 408ms</span><br><span class="line">Built at: 2018-4-12 18:15:23</span><br><span class="line">    Asset     Size  Chunks             Chunk Names</span><br><span class="line">bundle.js  337 KiB    main  [emitted]  main</span><br><span class="line">Entrypoint main = bundle.js</span><br><span class="line">[./app.js] 84 bytes &#123;main&#125; [built]</span><br><span class="line">[./module.js] 69 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/ansi-regex/index.js] 135 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/html-entities/index.js] 231 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/loglevel/lib/loglevel.js] 7.68 KiB &#123;main&#125; [built]</span><br><span class="line">[./node_modules/sockjs-client/dist/sockjs.js] 176 KiB &#123;main&#125; [built]</span><br><span class="line">[./node_modules/strip-ansi/index.js] 161 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/url/url.js] 22.8 KiB &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack-dev-server/client/index.js?http://localhost:3000] (webpack)-dev-server/client?http://localhost:3000 7.75 KiB &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.58 KiB &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.05 KiB &#123;main&#125; [built]</span><br><span class="line">   [0] multi (webpack)-dev-server/client?http://localhost:3000 ./app.js 40 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack/hot sync ^\.\/<span class="built_in">log</span>$] (webpack)/hot sync nonrecursive ^\.\/<span class="built_in">log</span>$ 170 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack/hot/emitter.js] (webpack)/hot/emitter.js 77 bytes &#123;main&#125; [built]</span><br><span class="line">[./node_modules/webpack/hot/log.js] (webpack)/hot/log.js 1.03 KiB &#123;main&#125; [optional] [built]</span><br><span class="line">    + 12 hidden modules</span><br><span class="line">ℹ ｢wdm｣: Compiled successfully.</span><br></pre></td></tr></table></figure></p>
-<p>打开浏览器访问: <a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a> :</p>
-<p><img src="https://cdn.yuque.com/yuque/2018/png/95485/1523528464804-034a1c72-3799-4d26-8943-fce80f93716c.png" alt="图片.png | left | 665x156"></p>
-<h4 id="一切皆模块与Loaders"><a href="#一切皆模块与Loaders" class="headerlink" title="一切皆模块与Loaders"></a>一切皆模块与Loaders</h4><p><img src="https://cdn.yuque.com/yuque/2018/png/95485/1523532363562-5eddba26-5782-4f3b-899b-fb587f65f6cb.png" alt="图片.png | left | 665x333"></p>
-<p>接下来我们要介绍一个 Webpack 的核心特性——一切皆模块。对于像 <code>RequireJS</code> 或 <code>Browserify</code> 这样的打包工具而言，<strong>它们仅仅能够处理 JavaScript</strong>。然而我们的工程不仅仅有 JavaScript，还有模板、样式文件、图片等等其它类型的资源，这就意味着我们还需要使用别的工具去管理它们。<br>在 Webpack 的思想中，<strong>所有这些资源——模板、样式、图片等等都是模块</strong>，因为这些资源也具备模块的特性——<strong>它们都负责特定的职能，并且具有可复用性</strong>。因此，我们可以使用 Webpack 去管理所有这些资源，并且把它们都当做模块来处理。<br>到了代码层面，让我们实际来使用一下这个特性。在项目中创建一个很简单的 style.css：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">text-align</span>: center;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#09c</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>接下来编辑项目中的 app.js：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> moduleLog <span class="keyword">from</span> <span class="string">'./module.js'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./style.css'</span>;</span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">'app.js loaded.'</span>);</span><br><span class="line">moduleLog();</span><br></pre></td></tr></table></figure></p>
-<p>让我们来看一下文件的改动。在上面的 app.js 中我们引入了一个 CSS 文件，你可能会觉得有点奇怪。在模块语法层面来说我们在 JS 文件中只能引入 JS，因为编译器无法编译其它类型的文件。然而在 Webpack 中，我们可以在 JS 文件中引入 CSS、LESS、SCSS，甚至是 Mustache、PNG。实际上，Webpack 会处理在依赖树中的所有资源，不管它是 JS 也好，还是 CSS 也好。那么 Webpack 是如何使得它在打包过程中解析这些不属于 JavaScript 的语法呢？这就要提到 Webpack 中另一个概念——loader。<br>l__oader 可以被理解成对于 Webpack 能力的扩展。__Webpack 本身只能处理 JavaScript，而对于别的类型的语法则完全不认识。如果我们需要引入某一类型的模块，那么就需要通过为它添加特性类型的 loader。比如上面我们在 app.js 中引入了一个 CSS 文件，那么我们就需要 CSS 的 loader。<br>loader 是独立与 Webpack 存在的，Webpack 内部并不包含任何 loader，因此我们首先使用 yarn 安装 css-loader（很多情况下，解析某种文件的 loader 命名就是 <code>&lt;filetype&gt;-loader</code>，比如 <code>sass-loader</code>、<code>mustache-loader</code>、<code>coffee-loader</code> 等，通过 google 或者 github 很容易搜索到）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add css-loader -D</span><br></pre></td></tr></table></figure></p>
-<p>现在让我们编辑 webpack.config.js 来让 css-loader 生效：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: <span class="string">'./app.js'</span>,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">        filename: <span class="string">'bundle.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                use: <span class="string">'css-loader'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到我们配置了 module.rules 这样一个数组，数组中的每项则是一个对象，我们为它添加了两个属性（实际上有更多的属性，这里我们只涉及两个）。<br><strong>test</strong>：代表我们希望 Webpack 对哪种类型的文件使用该 loader。通过正则匹配我们找出符合要求的以 <code>.css</code> 结尾文件名的文件。 <strong>use</strong>：对所匹配到文件进行处理的 loader 的名字。<br>现在让我们重新执行打包命令，然而当你刷新页面你可能会发现 style.css 中的样式并没有生效。这是因为我们使用 <code>css-loader</code> 只是解决了 CSS 语法解析的问题，然而并没有把样式加到页面上。现在让我们为项目添加 <code>style-loader</code> 来解决这个问题，它会负责为我们的样式生成 style 标签并插入到页面中。<br>首先还是使用 yarn 来安装 <code>style-loader</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add style-loader -D</span><br></pre></td></tr></table></figure></p>
-<p>接下来编辑 webpack.config.js：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">'./app.js'</span>,</span><br><span class="line">  mode: <span class="string">'development'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">      path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'bundle.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  devServer: &#123;</span><br><span class="line">    port: <span class="number">3000</span>,</span><br><span class="line">    publicPath: <span class="string">"/dist/"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          &#123; <span class="attr">loader</span>: <span class="string">'style-loader'</span> &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'css-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              modules: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到在 css-loader 之前我添加上了 style-loader，并且使用 “!” 分隔，这是 Webpack 对于 loader 的配置形式。loader 的执行顺序是从右向左，也就是说 CSS 文件会首先经过 css-loader 来解析语法，然后通过 style-loader 来生成插入 style 标签的代码。现在当你重新打包之后刷新页面，你应该能看到之前添加的样式在页面中生效了。<br>以上是一个使用 loader 的简单的例子，我们通过链式的 loader 配置来处理样式文件，你也可以试试为你的工程添加更多的 loader。并且 loader 还有更多的配置项，具体可以参阅官方文档，这里不再详述。</p>
-<h4 id="资源压缩"><a href="#资源压缩" class="headerlink" title="资源压缩"></a>资源压缩</h4><p>既然已经聊过了模块打包，现在让我们继续深入到工程构建中的其它流程。我们知道客户端页面加载性能是作为前端工程师的重要关注点之一。为了使页面渲染的更快，我们希望 JS、CSS 等资源能更快地传输到客户端，所以所传输的资源体积越小越好，因此我们一般都会将资源进行压缩处理，Webpack 可以帮我们做这项工作。<br>压缩实际上是从源代码中去掉生产环境下不必要的内容，比如代码中的注释、换行、空格，这些也许对于开发者来说有用，但是用户并不需要这些。去掉这些之后可以减小资源的整体体积，同时不影响代码的实际功能。<br>添加压缩功能需要用到 Webpack 的 plugin 配置项，通过该配置项我们来为工程打包添加辅助插件。这些插件可以侵入打包的各个流程，来实现特定的功能。它们有些是 Webpack 自带的，有些需要我们手动从 npm 去安装。现在让我们来安装压缩插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i uglifyjs-webpack-plugin --save-dev</span><br></pre></td></tr></table></figure></p>
-<p>接着编辑 webpack.config.js 将它引入：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> UglifyJSPlugin = <span class="built_in">require</span>(<span class="string">'uglifyjs-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: <span class="string">'./app.js'</span>,</span><br><span class="line">    output: ...</span><br><span class="line">    <span class="built_in">module</span>: ...</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> UglifyJSPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>现在当你执行打包你会发现生成的 bundle.js 已经是压缩过的并且基本不具备可读性，但是它的体积比之前已经减小了很多。</p>
-<h4 id="按需加载"><a href="#按需加载" class="headerlink" title="按需加载"></a>按需加载</h4><p>对于现在的 JavaScript 应用，尤其是单页应用来说，资源体积过大是一个很常见的问题。一般来说，当我们加载一个单页应用的时候，我们需要把整个应用的逻辑全塞在入口 JS 文件中，这会使得首页加载速度很慢。假如我们可以在页面需要的时候再去加载我们需要的模块就好了，Webpack 可以帮我们做到这一点。<br>Webpack 支持异步加载模块的特性，从原理上说其实很简单——就是动态地向页面中插入 script 标签。比如一个拥有五个页面（或者说路由状态）的单页应用，我们在首页加载的 index.js 中只放首页需要的逻辑。而另外四个页面的逻辑则通过跳转到其对应路由状态时再进行异步加载。这样的话就实现了只加载用户需要的模块，也就是按需加载。<br>在代码层面，Webpack 支持两种方式进行异步模块加载，一种是 CommonJS 形式的 <code>require.ensure</code>，一种是 ES6 Module 形式的异步 <code>import()</code>。在这里我们使用 <code>import()</code> 的形式动态加载我们的模块。<br>首先更改一下 module.js，因为异步加载的脚本不允许使用 <code>document.write</code>，我们把之前的代码改为一个 console.log 函数：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'module.js loaded.'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后编辑 app.js，将 module.js 以异步的形式加载进来：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(<span class="string">'./module.js'</span>).then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">module</span>.log();</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="string">'An error occurred while loading the module'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">'app.js loaded.'</span>);</span><br></pre></td></tr></table></figure></p>
-<p>修改 webpack.config.js：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: <span class="string">'./app.js'</span>,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">        publicPath: <span class="string">'./dist/'</span>,</span><br><span class="line">        filename: <span class="string">'bundle.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 省略其它配置...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这里我们在 output 中添加了一个配置项 <code>publicPath</code>，<strong>它是 Webpack 中一个很重要又很容易引起迷惑的配置。</strong>当我们的工程中有按需加载以及图片和文件等外部资源时就需要它来配置这些资源的路径，否则页面上就会报 404。这里我们将 publicPath 配置为相对于 html 的路径，使按需加载的资源生成在 dist 目录下并且页面能正确地引用到它。<br>重新打包之后你会发现打包结果中多出来一个 0.bundle.js，这里面就是将来会被异步加载进来的内容。刷新页面并查看 chrome 的 network 标签，可以看到页面会请求 0.bundle.js。它并不是来源于 index.html 中的引用，而是通过 bundle.js 在页面插入了一个 script 标签来将其引入的。</p>
-<h3 id="使用-Webpack-的构建特性"><a href="#使用-Webpack-的构建特性" class="headerlink" title="使用 Webpack 的构建特性"></a>使用 Webpack 的构建特性</h3><p>从 2.0.0 版本开始，Webpack 开始加入了更多的可以优化构建过程的特性。</p>
-<h4 id="tree-shaking"><a href="#tree-shaking" class="headerlink" title="tree-shaking"></a>tree-shaking</h4><p>在关于模块的那一篇文章中我们提到过，ES6 Module 的模块依赖解析是在代码静态分析过程中进行的。换句话说，它可以在代码的编译过程中得到依赖树，而非运行时。利用这一点 Webpack 提供了 tree-shaking 功能，它可以帮助我们检测工程中哪些模块有从未被引用到的代码，这些代码不可能被执行到，因此也称为”死代码”。通过 tree-shaking，Webpack 可以在打包过程中去掉这些死代码来减小最终的资源体积。<br>开启 tree-shaking 特性很简单，只要保证模块遵循 ES6 Module 的形式定义即可，这意味着之前所有我们的例子其实都是默认已经开启了的。但是要注意如果在配置中使用了 babel-preset-es2015 或者 babel-preset-env，则需要将其模块依赖解析的特性关掉，如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">presets: [</span><br><span class="line">  [env, &#123;<span class="attr">module</span>: <span class="literal">false</span>&#125;]</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
-<p>这里我们测试一下 tree-shaking 的功能，编辑 module.js:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// module.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'module.js loaded.'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> unusedFunc = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'not used'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>打开页面查看 0.bundle.js 的内容，应该可以发现 unusedFunc 的代码是不存在的，因为它没有被别的模块使用，属于死代码，在 tree-shaking 的过程中被优化掉了。<br>tree-shaking 最终的效果依赖于实际工程的代码本身，在我对于实际工程的测试中，一般可以将最终的体积减小 3%~5%。总体来看，我认为如果要使 tree-shaking 发挥真正的效果还要等几年的时间，因为现在大多数的 npm 模块还是在使用 CommonJS，因此享受不了这个特性带来的优势。</p>
-<h4 id="scope-hoisting"><a href="#scope-hoisting" class="headerlink" title="scope-hoisting"></a>scope-hoisting</h4><p>scope-hoisting（作用域提升）是由 Webpack3 提供的特性。在大型的工程中模块引用的层级往往较深，这会产生比较长的引用链。scope-hoisting 可以将这种纵深的引用链拍平，使得模块本身和其引用的其它模块作用域处于同级。这样的话可以去掉一部分 Webpack 的附加代码，减小资源体积，同时可以提升代码的执行效率。<br>目前如果要开启 scope-hoisting，需要引入它的一个内部插件：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>scope-hoisting 生效后会在 bundle.js 中看到类似下面的内容，你会发现 log 的定义和调用是在同一个作用域下了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CONCATENATED MODULE: ./module.js</span></span><br><span class="line"><span class="keyword">const</span> log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'module.js loaded.'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// CONCATENATED MODULE: ./app.js</span></span><br><span class="line">log();</span><br></pre></td></tr></table></figure></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上是对于 Webpack 一些基本特性的介绍，如果你想运行示例可以在本课程的 <a href="https://github.com/roscoe054/webpack-examples" target="_blank" rel="noopener">Github</a> 上找到。在后续介绍构建优化的文章中会进一步带来更多 Webpack 的进阶用法，可以帮助提升构建速度以及减小资源体积，同样到时也会给出更多的示例。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/vue-mixin/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/vue-mixin/" itemprop="url">
-                  Vue代码复用之混合(Mixin)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:06:51" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>本文整理自GitChat陈陆杨的达人课</code><a href="http://gitbook.cn/gitchat/column/5a3765c9d7fd13649973a41d" target="_blank" rel="noopener">《Vue2.0渐进开发应用实践》</a><code></code></p>
-<h3 id="混合属性"><a href="#混合属性" class="headerlink" title="混合属性"></a>混合属性</h3><p>混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。</p>
-<h4 id="混合属性的使用"><a href="#混合属性的使用" class="headerlink" title="混合属性的使用"></a>混合属性的使用</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mixin.js </span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      fromMixin: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  created () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'created from mixin'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MixinDemo.vue</span></span><br><span class="line"><span class="keyword">import</span> Mixin <span class="keyword">from</span> <span class="string">'./mixin.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [myMixin]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样<code>MixinDemo.vue</code>就拥有了<code>mixin.js</code>中定义的<code>data</code>和<code>methods</code>选项。</p>
-<h4 id="混合属性作用域"><a href="#混合属性作用域" class="headerlink" title="混合属性作用域"></a>混合属性作用域</h4><p>在混合属性中也可以直接使用<code>this</code>，这会指向到使用该混合属性的组件实例上，例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mixin.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  created () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// MixinDemo.vue</span></span><br><span class="line"><span class="keyword">import</span> Mixin <span class="keyword">from</span> <span class="string">'./mixin.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [myMixin],</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      name: <span class="string">'mixin demo'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>混合属性<code>created</code>函数中输出的是组件<code>MixinDemo.vue</code>中的<code>name</code>值。</p>
-<h4 id="选项合并"><a href="#选项合并" class="headerlink" title="选项合并"></a>选项合并</h4><p>如果<code>mixins</code>中的选项与组件选项定义了相同的属性的话，根据属性的不同，有两种处理方式：</p>
-<ul>
-<li>合并：<strong>生命周期钩子函数</strong>，两者的函数会合并成一个数组，依次调用，混合属性的钩子函数<strong>先于</strong>组件的同名钩子函数调用。<code>watch</code>也按此规则处理。</li>
-<li>覆盖：<code>data</code> <code>computed</code> <code>methods</code> <code>components</code> <code>directives</code>，则会被混合成一个对象，键名冲突时，取<strong>组件选项键值对</strong>。<br><a href="https://github.com/GavinCLY/gitchat-vue-examples/blob/master/startup/src/components/MyMixin.vue" target="_blank" rel="noopener">Mixin 实例请参考这里</a>。<h4 id="常见场景"><a href="#常见场景" class="headerlink" title="常见场景"></a>常见场景</h4>混合属性通常可以用来实现很多非业务场景的能力，例如我们可以将 Vue 1 中的广播派发事件机制在混合属性中实现，这样如果有组件需要这样的通信机制，直接引入该混合属性即可。例如：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// emitter.js</span></span><br><span class="line"><span class="keyword">const</span> broadcast = <span class="function"><span class="keyword">function</span> (<span class="params">eventName, params</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 遍历所有的子组件，若子组件存在对应事件的监听，则触发</span></span><br><span class="line">  <span class="keyword">this</span>.$children.forEach(<span class="function"><span class="params">child</span> =&gt;</span> &#123;</span><br><span class="line">    child._events[eventName] &amp;&amp; child.$emit(eventName, params)</span><br><span class="line">    <span class="comment">// 若子组件也包含子组件，则继续遍历</span></span><br><span class="line">    <span class="keyword">if</span> (child.$children.length) &#123;</span><br><span class="line">      broadcast.call(child, eventName, params)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    dispatch (eventName, params) &#123;</span><br><span class="line">      <span class="comment">// 获取元素父组件</span></span><br><span class="line">      <span class="keyword">let</span> parent = <span class="keyword">this</span>.$parent || <span class="keyword">this</span>.$root</span><br><span class="line">      <span class="keyword">while</span> (parent) &#123;</span><br><span class="line">        <span class="comment">// 若父组件存在对应事件，则触发并结束向上派发</span></span><br><span class="line">        <span class="keyword">if</span> (parent._events[eventName]) &#123;</span><br><span class="line">          parent.$emit(eventName, params)</span><br><span class="line">          <span class="keyword">break</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 若不存在则继续向上寻找</span></span><br><span class="line">          parent = parent.$parent</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    broadcast (eventName, params) &#123;</span><br><span class="line">      broadcast.call(<span class="keyword">this</span>, eventName, params)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><a href="https://github.com/GavinCLY/gitchat-vue-examples/blob/master/startup/src/views/MixinDemo.vue" target="_blank" rel="noopener">完整实例请单击这里</a>。</p>
-
-          
+          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code><br><strong>JavaScript 是一个缺乏标准库的语言。</strong>当你想解决 URL 处理、日期处理这类很常见的问题，在没有标准库的情况下就只能自己动手写代码或者从自己以前的工程中拷贝代码。而使用 npm 等包管理器最大的好处是里面有很多非常成熟的包来解决这类问题，可以直接安装到项目中使用，给开发工作带来了很大的便利。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/About js package manager/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -963,7 +472,7 @@
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 16:15:55" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:14:22" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -1002,104 +511,455 @@
 
       
         
-          
-            <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
+          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
 <h2 id="曾经的-Web-开发的做法和缺陷："><a href="#曾经的-Web-开发的做法和缺陷：" class="headerlink" title="曾经的 Web 开发的做法和缺陷："></a>曾经的 Web 开发的做法和缺陷：</h2><ul>
 <li>在 HTML 中插入一个 script 标签，直接在里面书写代码；问题：</li>
 <li>全局作用域的污染。由于<strong>在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染</strong>。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。</li>
 <li>代码重用性差。在一个多页面应用的场景下，经常会有一些逻辑是这些页面之间共有的，此时我们不得不将这些代码复制粘贴到各个页面中。而当此处逻辑改动的时候我们也需要去更新所有页面的代码，造成很多额外的成本。</li>
 </ul>
-<h2 id="后来的解决办法"><a href="#后来的解决办法" class="headerlink" title="后来的解决办法"></a>后来的解决办法</h2><p>后来逐渐有一些针对这些问题的解决办法：</p>
-<ul>
-<li>首先，可以将 HTML 中内联的 JavaScript 提取出来成为单独的 JavaScript 文件。比如说一些页面公有的逻辑可以放在类似 common.js 中来被各个页面引用，这可以解决各个页面之间重用的问题。</li>
-<li>至于全局作用域污染的问题，则可以使用立即执行函数表达式将它包起来（ IIFE ），只把接口暴露到全局上。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 通过立即执行函数表达式将作用域隔离</span></span><br><span class="line">  <span class="keyword">var</span> foo = <span class="string">"bar"</span>;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>看上去好像问题已经得到了解决，然而随着页面逻辑的复杂度增加开发者又面临了新的问题：</p>
-<ul>
-<li>页面 JavaScript 文件的引用顺序由于 HTML 页面引用和处理 JavaScript 文件只能是顺序的（不考虑 async 等），因此页面的 JavaScript 之间依赖关系也必须是顺序的。而我们知道一个大型工程内部的模块依赖关系通常是树状的（比如 index.js 依赖 a、b、c 三个模块，而 a、b、c 又有各自的依赖），简单的顺序依赖关系无法满足需求。例如在 jQuery 最流行的时期，jQuery 本身以及其相关的插件之间有着各种各样的依赖关系，有些库可能自身包含 jQuery，不同的插件可能需要不同的 jQuery 版本，这些问题都不是简单的顺序依赖关系可以解决的。</li>
-<li>页面引用的 JavaScript 文件的长度与数量如何权衡随着页面逻辑的增加，工程中的 JavaScript 文件越来越长，也越来越难以维护。一个页面的单个 JavaScript 文件可能有数千行甚至上万行。而如果按照功能来把页面逻辑切割成一个个小的 JavaScript 文件，则最终会走到另一个极端——页面请求过多。我们知道每个 HTTP 请求都是需要连接时间的，对于小模块而言每一个都要单独建立连接总归得不偿失，必然会导致页面渲染速度的下降。</li>
-</ul>
-<h2 id="走向正轨的第一步——模块化"><a href="#走向正轨的第一步——模块化" class="headerlink" title="走向正轨的第一步——模块化"></a>走向正轨的第一步——模块化</h2><ul>
-<li>模块标准<br>CommonJS 以及 AMD 的出现，为前端定义了模块的标准。</li>
-<li><p>实现模块化标准的库也有了实现这些模块化的库，比如 RequireJS 以及 Browserify。可以让开发者将自己工程中的代码按模块进行划分，模块之间也不再仅仅是简单的顺序依赖关系。</p>
-</li>
-<li><p>对于开发者而言开发体验更加友好，因为开发中每次需要关注的仅仅是单个模块，而不是堆放在一起的上千行 JavaScript 文件；</p>
-</li>
-<li>而对于客户端来说则只用接受单一的打包产物，解决了文件数量过多导致 HTTP 请求耗时长的问题。</li>
-</ul>
-<h3 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h3><ul>
-<li>作用域封装，避免全局变量污染</li>
-<li>提高代码复用性</li>
-<li>解除耦合</li>
-<li>按需加载</li>
-</ul>
-<h2 id="JavaScript-模块发展简史"><a href="#JavaScript-模块发展简史" class="headerlink" title="JavaScript 模块发展简史"></a>JavaScript 模块发展简史</h2><h4 id="最原始的方式-script-标签"><a href="#最原始的方式-script-标签" class="headerlink" title="最原始的方式: script 标签"></a>最原始的方式: script 标签</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleA.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleB.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/main.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-<p>缺陷: 这种方法的缺陷是所有这些脚本都是<strong>共用全局的作用域</strong>。在任何一个 JavaScript 文件中进行顶层作用域的变量或函数声明，都会暴露在全局中，使得其它脚本也相应获取。当应用的规模和复杂度上升，<strong>这些脚本之间很容易发生命名冲突，从而导致不可预知的问题。</strong></p>
-<h4 id="立即执行函数表达式-IIFE"><a href="#立即执行函数表达式-IIFE" class="headerlink" title="立即执行函数表达式(IIFE)"></a>立即执行函数表达式(IIFE)</h4><p>IIFE 的实现原理是把代码包裹在一个函数中，并且在声明这个函数之后立即执行它，这样相当于为代码单独创建了一个作用域。比如在下面的代码中我们创建了一个立即执行函数表达式，变量的声明处于它自己的函数作用域内，与其它的模块作用域隔离开:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// foobar 并不会暴露在全局作用域</span></span><br><span class="line">  <span class="keyword">var</span> foobar = <span class="string">"Hello IIFE!"</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(foobar);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>如果通过这种方法封装的模块需要与别的模块发生交互，则可以将特定的对象绑定在全局来允许其它模块通过全局对象获取，比如下面的形式：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// calculator.js</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 将 calculator 绑定在全局对象上，使其它模块调用</span></span><br><span class="line">  <span class="built_in">window</span>.calculator = &#123;</span><br><span class="line">    add: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    sub: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="comment">// app.js</span></span><br><span class="line">calculator.add(<span class="number">1</span>, <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
-<p>立即执行函数表达式的缺点在于，如果模块之间有着依赖关系，必须将它们按照特定的顺序引入到页面中。比如上面的 calculator，必须使定义 calculator 的 <code>calculator.js</code> 先执行，再执行调用的模块。<strong>由于这种依赖关系是隐式的，当所有这些模块都互相依赖时，文件的引入顺序将变得难以维护。</strong></p>
-<h4 id="AMD"><a href="#AMD" class="headerlink" title="AMD"></a>AMD</h4><p>AMD 是 Asynchronous Module Definition（异步模块定义）的缩写。下面的代码使用 AMD 规范定义了一个模块：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个求和的模块</span></span><br><span class="line">define(<span class="string">"getSum"</span>, [<span class="string">"math"</span>], <span class="function"><span class="keyword">function</span>(<span class="params">math</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"sum: "</span> + math.sum(a, b));</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>在 AMD 中定义模块是使用  <code>define</code>  函数，它可以接受三个参数。</p>
-<ul>
-<li>第一个参数是当前模块的 ID，相当于给这个模块起一个名字；</li>
-<li>第二个参数是当前模块的依赖，比如上面我们定义的  <code>getSum</code>模块需要  <code>math</code>  模块的依赖;</li>
-<li>第三个参数可以是函数或者对象。如果是函数，可以利用函数的返回值将定义的模块接口导出；如果是对象，则代表它为当前模块的导出值。</li>
-</ul>
-<p>通过这种形式定义模块的好处在于:</p>
-<ul>
-<li>它  <strong>显式</strong>  地表达出了每个模块所依赖的其它模块。</li>
-<li>并且模块定义也不再绑定到全局对象上，不必担心其在别的地方被篡改。</li>
-</ul>
-<h4 id="Browserify-与-CommonJS"><a href="#Browserify-与-CommonJS" class="headerlink" title="Browserify 与 CommonJS"></a>Browserify 与 CommonJS</h4><p>Browserify 的出现带来了浏览器环境模块的变革。它是一个运行在 Node 环境下的模块打包工具，可以把模块按照 Node.js 的模块规则合并为浏览器支持的形式，这使得浏览器端的框架类库也可以按照 CommonJS 的形式编写。在 CommonJS 中每个文件是一个模块，并且拥有属于自己的作用域和上下文。<strong>模块的依赖通过&nbsp;</strong><code><strong>require</strong></code><strong>&nbsp;函数来引入。</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> math = <span class="built_in">require</span>(<span class="string">"./math"</span>);</span><br></pre></td></tr></table></figure>
-<p>如果想把模块的接口暴露给外部，则要通过  <code>exports</code>  将其导出，如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exports.getSum = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>AMD 和 CommonJS 具有同样的特性——<strong>模块的依赖必须显式引入</strong>，这样就解决了之前维护复杂模块引入时的顺序问题。</p>
-<h4 id="ES6-Module"><a href="#ES6-Module" class="headerlink" title="ES6 Module"></a>ES6 Module</h4><p>ES6 Module 是目前比较推荐开发者使用的模块标准。<strong>之所以在过去我们有各种不同的模块化标准是因为 JavaScript 这门语言本身不具备模块化的特性，而现在 ES6 中已经具备了。</strong>ES6 Module 的模块语法和 CommonJS 很像，它通过  <code>import</code>  和  <code>export</code>  来进行模块的导入和导出。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math <span class="keyword">from</span> <span class="string">"./math"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在 ES6 Module 中也是每个文件作为一个模块。<strong>和 CommonJS 不同的是，ES6 Module 的模块的依赖是静态的，或者说是在编译时确定的，而不是运行时确定的。</strong></p>
-<p>举个例子，我们可以在 CommonJS 中的  <code>if</code>  语句中 require 模块，根据代码运行时  <code>if</code>  的判断条件决定是否要引入该模块。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据运行时条件确定是否引入</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">Date</span>.now() &gt; <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">"2019-01-01"</span>)) &#123;</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">"./my_module"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>而在 ES6 Module 中则不允许这样做，</strong><code><strong>import</strong></code><strong>&nbsp;必须在代码的顶层作用域</strong>，这意味着你不能把它放在  <code>if</code>  等代码块中。ES6 Module 这样规定的原因在于<strong>可以使编译器在编译阶段就可以获取到整个依赖树</strong>，从而进行代码静态分析层面的优化，比如检测出哪些模块是从来没有被使用过的，然后从打包结果中优化掉等等。</p>
-<h4 id="动态加载模块"><a href="#动态加载模块" class="headerlink" title="动态加载模块"></a>动态加载模块</h4><ul>
-<li>CommonJS 可以直接使用<code>require</code>实现:</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (condition) &#123;</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">"moduleA"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">"moduleB"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 ES6 Module 中,由于上面我们提到的 import 是在编译时被处理而非运行时,因此无法实现动态加载的特性。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">if</span>(condition) &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'moduleA'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">var</span> foo = <span class="string">'foo'</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="string">'bar'</span>;</span><br><span class="line"><span class="keyword">import</span> foobar <span class="keyword">from</span> (foo + bar);</span><br></pre></td></tr></table></figure>
-<p>为了解决这个问题，tc39 提出了一个  <code>import()</code>  函数提案。它可以接受一个参数，指定所加载的模块，并且返回一个 Promise 对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = <span class="string">"foo"</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="string">"bar"</span>;</span><br><span class="line"><span class="keyword">import</span>(foo + bar)</span><br><span class="line">  .then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"foobar loaded:"</span>, <span class="built_in">module</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-<h4 id="模块打包原理简述–Webpack"><a href="#模块打包原理简述–Webpack" class="headerlink" title="模块打包原理简述–Webpack"></a>模块打包原理简述–Webpack</h4><p>Webpack 以及其它的一些打包工具最基本的功能就是<strong>按照我们定义好的依赖树将模块合并成单一的文件</strong>，让浏览器能够<strong>按照预想的依赖顺序去执行</strong>。这个过程我们通常将它叫做模块打包。<br>Webpack 打包 ES6 Module  的例子:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir webpack-bundle &amp;&amp; <span class="built_in">cd</span> webpack-bundle</span><br><span class="line">touch app.js &amp;&amp; touch module.js &amp;&amp; touch webpack.config.js</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="keyword">import</span> moduleLog <span class="keyword">from</span> <span class="string">"./module.js"</span>;</span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">"app.js loaded."</span>);</span><br><span class="line">moduleLog();</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// module.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.write(<span class="string">"module.js loaded."</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用简单的配置文件:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">"./app.js"</span>,</span><br><span class="line">  mode: <span class="string">"development"</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">"dist"</span>),</span><br><span class="line">    filename: <span class="string">"bundle.js"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>然后使用 Webpack 进行打包：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Webpack 版本需要大于等于 2，这里使用的版本是 4.5.0</span></span><br><span class="line">webpack</span><br></pre></td></tr></table></figure>
-<p><code>app.js</code> 是我们的打包入口文件,<code>dist/bundle.js</code>是最终的打包合并结果文件。Webpack 会在打包的过程中从入口 app.js 开始查找所有依赖的模块，并最终包装和合并这些模块放在 bundle.js 中。接下来让我们分析一下打包结果 dist/bundle.js 的大体结构：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">modules</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> installedModules = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* code */</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> __webpack_require__(<span class="number">0</span>); <span class="comment">// entry file</span></span><br><span class="line">&#125;)([</span><br><span class="line">  <span class="comment">/* modules array */</span></span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
-<p>这段代码总体上来看是一个立即执行函数表达式，<strong>它只有一个参数 modules</strong>，即 Webpack 从入口文件开始检索到的所有依赖模块。每一个依赖模块会被 Webpack 进行一次包装，放到 modules array 的数组中等待代码运行时调用。上面立即执行的匿名函数体内分为几个部分。首先定义了一个 installedModules 对象用来放置已经加载过的模块。接着定义了  <code>__webpack_require__</code>，这个函数是 Webpack 模块加载的核心，可以认为它是浏览器环境下的  <code>require</code>。在函数体最后使用  <code>__webpack_require__</code>加载了工程的入口模块，<strong>在浏览器中执行时即会从入口开始去逐步执行后面的模块</strong>。让我们看一下  <code>__webpack_require__</code>  的具体实现：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__webpack_require__</span>(<span class="params">moduleId</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Check if module is in cache</span></span><br><span class="line">  <span class="keyword">if</span> (installedModules[moduleId]) &#123;</span><br><span class="line">    <span class="keyword">return</span> installedModules[moduleId].exports;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Create a new module (and put it into the cache)</span></span><br><span class="line">  <span class="keyword">var</span> <span class="built_in">module</span> = (installedModules[moduleId] = &#123;</span><br><span class="line">    i: moduleId,</span><br><span class="line">    l: <span class="literal">false</span>,</span><br><span class="line">    exports: &#123;&#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// Execute the module function</span></span><br><span class="line">  modules[moduleId].call(</span><br><span class="line">    <span class="built_in">module</span>.exports,</span><br><span class="line">    <span class="built_in">module</span>,</span><br><span class="line">    <span class="built_in">module</span>.exports,</span><br><span class="line">    __webpack_require__</span><br><span class="line">  );</span><br><span class="line">  <span class="comment">// Flag the module as loaded</span></span><br><span class="line">  <span class="built_in">module</span>.l = <span class="literal">true</span>;</span><br><span class="line">  <span class="comment">// Return the exports of the module</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">module</span>.exports;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过上面代码可以看出  <code>__webpack_require__</code>  主要做了几个事情：</p>
-<ol>
-<li>检查该模块是否已经加载过，如果是则直接返回已加载过的</li>
-<li>添加 moduleId 等属性，并把该模块放进 installedModules</li>
-<li>将模块 this 指到它的 module.exports，并执行已经包装好的模块逻辑</li>
-<li>返回 modules.exports<br>在 Webpack 包装模块代码的时候，会<strong>把&nbsp;</strong><code><strong><strong>webpack_require</strong></strong></code><strong>&nbsp;作为参数传进去</strong>。在实际的模块代码中，导入其它模块的语句都会被替换为这种浏览器可以执行的形式，<strong>通过这种方式使模块间有了互相调用的能力。</strong><br>纵观整个 bundle.js，Webpack 主要在打包中处理了下面这些问题：</li>
-<li>从入口文件开始分析整个应用的依赖树</li>
-<li>将每个依赖模块包装起来，并放到一个数组中等待调用</li>
-<li>实现模块加载的方法，并提供到模块执行的环境中，使得模块间可以互相调用</li>
-<li>将执行入口文件的逻辑放在一个立即执行函数表达式中当浏览器执行这个 bundle.js 时，<strong>首先会执行入口文件的逻辑，接着会利用 Webpack 提供好的模块以及模块的加载方法来根据依赖关系一步步执行整个应用。</strong>以上就是一个简单的 Webpack 处理打包的过程。</li>
-</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/Why use Webpack/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Use webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/08/Use webpack/" itemprop="url">
+                  为什么要使用Webpack
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:54" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
 
           
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
+<p><img src="https://cdn.yuque.com/yuque/2018/png/95485/1523526490084-e6add3e6-1931-4581-ab12-d43e94227175.png" alt="图片.png | left | 665x347"></p>
+<p>对于 JavaScript 应用来说，现在市面上可以选择的打包和构建工具有很多：Gulp、Grunt、Browserify、Webpack、Rollup 等等。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/Use webpack/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/vue-mixin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/08/vue-mixin/" itemprop="url">
+                  Vue代码复用之混合(Mixin)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:16" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>本文整理自GitChat陈陆杨的达人课</code><a href="http://gitbook.cn/gitchat/column/5a3765c9d7fd13649973a41d" target="_blank" rel="noopener">《Vue2.0 渐进开发应用实践》</a><code></code></p>
+<h3 id="混合属性"><a href="#混合属性" class="headerlink" title="混合属性"></a>混合属性</h3><p>混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/vue-mixin/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/08/npm-custom-init/" itemprop="url">
+                  npm init 解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:38" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
+<p>将会使用默认值配置;</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/npm-custom-init/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
