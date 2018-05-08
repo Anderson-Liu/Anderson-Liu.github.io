@@ -426,7 +426,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Why use Webpack/">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Anderson">
@@ -445,8 +445,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/08/Why use Webpack/" itemprop="url">
-                  为什么要使用Webpack
+                <a class="post-title-link" href="/2018/05/08/npm-custom-init/" itemprop="url">
+                  npm init 解析
                 </a>
               
             
@@ -472,7 +472,7 @@
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:14:22" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:38" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -511,15 +511,11 @@
 
       
         
-          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
-<h2 id="曾经的-Web-开发的做法和缺陷："><a href="#曾经的-Web-开发的做法和缺陷：" class="headerlink" title="曾经的 Web 开发的做法和缺陷："></a>曾经的 Web 开发的做法和缺陷：</h2><ul>
-<li>在 HTML 中插入一个 script 标签，直接在里面书写代码；问题：</li>
-<li>全局作用域的污染。由于<strong>在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染</strong>。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。</li>
-<li>代码重用性差。在一个多页面应用的场景下，经常会有一些逻辑是这些页面之间共有的，此时我们不得不将这些代码复制粘贴到各个页面中。而当此处逻辑改动的时候我们也需要去更新所有页面的代码，造成很多额外的成本。</li>
-</ul>
+          <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
+<p>将会使用默认值配置;</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/Why use Webpack/#more" rel="contents">
+            <a class="btn" href="/2018/05/08/npm-custom-init/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -866,7 +862,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Why use Webpack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Anderson">
@@ -885,8 +881,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/08/npm-custom-init/" itemprop="url">
-                  npm init 解析
+                <a class="post-title-link" href="/2018/05/08/Why use Webpack/" itemprop="url">
+                  为什么要使用Webpack
                 </a>
               
             
@@ -912,7 +908,7 @@
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:38" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:14:22" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -951,11 +947,15 @@
 
       
         
-          <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
-<p>将会使用默认值配置;</p>
+          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
+<h2 id="曾经的-Web-开发的做法和缺陷："><a href="#曾经的-Web-开发的做法和缺陷：" class="headerlink" title="曾经的 Web 开发的做法和缺陷："></a>曾经的 Web 开发的做法和缺陷：</h2><ul>
+<li>在 HTML 中插入一个 script 标签，直接在里面书写代码；问题：</li>
+<li>全局作用域的污染。由于<strong>在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染</strong>。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。</li>
+<li>代码重用性差。在一个多页面应用的场景下，经常会有一些逻辑是这些页面之间共有的，此时我们不得不将这些代码复制粘贴到各个页面中。而当此处逻辑改动的时候我们也需要去更新所有页面的代码，造成很多额外的成本。</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/npm-custom-init/#more" rel="contents">
+            <a class="btn" href="/2018/05/08/Why use Webpack/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
