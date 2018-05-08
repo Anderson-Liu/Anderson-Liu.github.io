@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文整理自GitChat陈陆杨的达人课《Vue2.0渐进开发应用实践》 混合属性混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。 混合属性的使用12345678910111213141516171819// mixin.js export default &amp;#123;">
+<meta name="keywords" content="Javascript,Vue2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue代码复用之混合(Mixin)">
+<meta property="og:url" content="http://peacesky.cn/2018/05/08/vue-mixin/index.html">
+<meta property="og:site_name" content="Peacesky">
+<meta property="og:description" content="本文整理自GitChat陈陆杨的达人课《Vue2.0渐进开发应用实践》 混合属性混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。 混合属性的使用12345678910111213141516171819// mixin.js export default &amp;#123;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-08T09:06:51.703Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue代码复用之混合(Mixin)">
+<meta name="twitter:description" content="本文整理自GitChat陈陆杨的达人课《Vue2.0渐进开发应用实践》 混合属性混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。 混合属性的使用12345678910111213141516171819// mixin.js export default &amp;#123;">
+
+
+
+
+
+
+  <link rel="canonical" href="http://peacesky.cn/2018/05/08/vue-mixin/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Vue代码复用之混合(Mixin) | Peacesky</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peacesky</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Under the peace sky.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/vue-mixin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue代码复用之混合(Mixin)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:06:51" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>本文整理自GitChat陈陆杨的达人课</code><a href="http://gitbook.cn/gitchat/column/5a3765c9d7fd13649973a41d" target="_blank" rel="noopener">《Vue2.0渐进开发应用实践》</a><code></code></p>
+<h3 id="混合属性"><a href="#混合属性" class="headerlink" title="混合属性"></a>混合属性</h3><p>混合属性是一直比组件更小颗粒度的复用方式，它以对象的形式存在，可以包含任意的组件选项（如 data、methods 等）。当组件使用混合对象的时候，将合并混合对象中的组件选项。</p>
+<h4 id="混合属性的使用"><a href="#混合属性的使用" class="headerlink" title="混合属性的使用"></a>混合属性的使用</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mixin.js </span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      fromMixin: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  created () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'created from mixin'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MixinDemo.vue</span></span><br><span class="line"><span class="keyword">import</span> Mixin <span class="keyword">from</span> <span class="string">'./mixin.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [myMixin]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样<code>MixinDemo.vue</code>就拥有了<code>mixin.js</code>中定义的<code>data</code>和<code>methods</code>选项。</p>
+<h4 id="混合属性作用域"><a href="#混合属性作用域" class="headerlink" title="混合属性作用域"></a>混合属性作用域</h4><p>在混合属性中也可以直接使用<code>this</code>，这会指向到使用该混合属性的组件实例上，例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mixin.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  created () &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// MixinDemo.vue</span></span><br><span class="line"><span class="keyword">import</span> Mixin <span class="keyword">from</span> <span class="string">'./mixin.js'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  mixins: [myMixin],</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      name: <span class="string">'mixin demo'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>混合属性<code>created</code>函数中输出的是组件<code>MixinDemo.vue</code>中的<code>name</code>值。</p>
+<h4 id="选项合并"><a href="#选项合并" class="headerlink" title="选项合并"></a>选项合并</h4><p>如果<code>mixins</code>中的选项与组件选项定义了相同的属性的话，根据属性的不同，有两种处理方式：</p>
+<ul>
+<li>合并：<strong>生命周期钩子函数</strong>，两者的函数会合并成一个数组，依次调用，混合属性的钩子函数<strong>先于</strong>组件的同名钩子函数调用。<code>watch</code>也按此规则处理。</li>
+<li>覆盖：<code>data</code> <code>computed</code> <code>methods</code> <code>components</code> <code>directives</code>，则会被混合成一个对象，键名冲突时，取<strong>组件选项键值对</strong>。<br><a href="https://github.com/GavinCLY/gitchat-vue-examples/blob/master/startup/src/components/MyMixin.vue" target="_blank" rel="noopener">Mixin 实例请参考这里</a>。<h4 id="常见场景"><a href="#常见场景" class="headerlink" title="常见场景"></a>常见场景</h4>混合属性通常可以用来实现很多非业务场景的能力，例如我们可以将 Vue 1 中的广播派发事件机制在混合属性中实现，这样如果有组件需要这样的通信机制，直接引入该混合属性即可。例如：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// emitter.js</span></span><br><span class="line"><span class="keyword">const</span> broadcast = <span class="function"><span class="keyword">function</span> (<span class="params">eventName, params</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 遍历所有的子组件，若子组件存在对应事件的监听，则触发</span></span><br><span class="line">  <span class="keyword">this</span>.$children.forEach(<span class="function"><span class="params">child</span> =&gt;</span> &#123;</span><br><span class="line">    child._events[eventName] &amp;&amp; child.$emit(eventName, params)</span><br><span class="line">    <span class="comment">// 若子组件也包含子组件，则继续遍历</span></span><br><span class="line">    <span class="keyword">if</span> (child.$children.length) &#123;</span><br><span class="line">      broadcast.call(child, eventName, params)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  methods: &#123;</span><br><span class="line">    dispatch (eventName, params) &#123;</span><br><span class="line">      <span class="comment">// 获取元素父组件</span></span><br><span class="line">      <span class="keyword">let</span> parent = <span class="keyword">this</span>.$parent || <span class="keyword">this</span>.$root</span><br><span class="line">      <span class="keyword">while</span> (parent) &#123;</span><br><span class="line">        <span class="comment">// 若父组件存在对应事件，则触发并结束向上派发</span></span><br><span class="line">        <span class="keyword">if</span> (parent._events[eventName]) &#123;</span><br><span class="line">          parent.$emit(eventName, params)</span><br><span class="line">          <span class="keyword">break</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 若不存在则继续向上寻找</span></span><br><span class="line">          parent = parent.$parent</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    broadcast (eventName, params) &#123;</span><br><span class="line">      broadcast.call(<span class="keyword">this</span>, eventName, params)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://github.com/GavinCLY/gitchat-vue-examples/blob/master/startup/src/views/MixinDemo.vue" target="_blank" rel="noopener">完整实例请单击这里</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Vue2-0/" rel="tag"># Vue2.0</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/08/Why use Webpack/" rel="next" title="为什么要使用Webpack">
+                <i class="fa fa-chevron-left"></i> 为什么要使用Webpack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/08/Use webpack/" rel="prev" title="为什么要使用Webpack">
+                为什么要使用Webpack <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Anderson</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#混合属性"><span class="nav-number">1.</span> <span class="nav-text">混合属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#混合属性的使用"><span class="nav-number">1.1.</span> <span class="nav-text">混合属性的使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#混合属性作用域"><span class="nav-number">1.2.</span> <span class="nav-text">混合属性作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选项合并"><span class="nav-number">1.3.</span> <span class="nav-text">选项合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见场景"><span class="nav-number">1.4.</span> <span class="nav-text">常见场景</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anderson</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
