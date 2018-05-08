@@ -102,25 +102,27 @@
 
 
 
-  <meta name="description" content="npm 快速初始化:1npm init -f (--force or --yes) 将会使用默认值配置;">
-<meta name="keywords" content="npm,Javascript">
+  <meta name="description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记   继承 层叠 特指  继承 CSS 中有很多属性是可以继承的，其中相当一部分都跟文本有关，比如颜色、字体、字号。 也有很多 CSS 属性不能继承，因为继承这些属性没有意义。这些不能继承的属性主要涉及元素盒子的定位和显示方式，比如边框、外边距、内边距">
+<meta name="keywords" content="css">
 <meta property="og:type" content="article">
-<meta property="og:title" content="npm init 解析">
-<meta property="og:url" content="http://peacesky.cn/2018/05/08/npm-custom-init/index.html">
+<meta property="og:title" content="CSS怎么解决样式冲突">
+<meta property="og:url" content="http://peacesky.cn/2018/05/08/css-style-conflict/index.html">
 <meta property="og:site_name" content="Peacesky">
-<meta property="og:description" content="npm 快速初始化:1npm init -f (--force or --yes) 将会使用默认值配置;">
+<meta property="og:description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记   继承 层叠 特指  继承 CSS 中有很多属性是可以继承的，其中相当一部分都跟文本有关，比如颜色、字体、字号。 也有很多 CSS 属性不能继承，因为继承这些属性没有意义。这些不能继承的属性主要涉及元素盒子的定位和显示方式，比如边框、外边距、内边距">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-08T09:13:38.224Z">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524134444834-8dd0d915-0a33-4761-a4e6-8e7612ca8db2.png">
+<meta property="og:updated_time" content="2018-05-08T09:35:28.062Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="npm init 解析">
-<meta name="twitter:description" content="npm 快速初始化:1npm init -f (--force or --yes) 将会使用默认值配置;">
+<meta name="twitter:title" content="CSS怎么解决样式冲突">
+<meta name="twitter:description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记   继承 层叠 特指  继承 CSS 中有很多属性是可以继承的，其中相当一部分都跟文本有关，比如颜色、字体、字号。 也有很多 CSS 属性不能继承，因为继承这些属性没有意义。这些不能继承的属性主要涉及元素盒子的定位和显示方式，比如边框、外边距、内边距">
+<meta name="twitter:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524134444834-8dd0d915-0a33-4761-a4e6-8e7612ca8db2.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://peacesky.cn/2018/05/08/npm-custom-init/"/>
+  <link rel="canonical" href="http://peacesky.cn/2018/05/08/css-style-conflict/"/>
 
 
 
@@ -130,7 +132,7 @@
   };
 </script>
 
-  <title>npm init 解析 | Peacesky</title>
+  <title>CSS怎么解决样式冲突 | Peacesky</title>
   
 
 
@@ -286,7 +288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/css-style-conflict/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Anderson">
@@ -303,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">npm init 解析
+          <h1 class="post-title" itemprop="name headline">CSS怎么解决样式冲突
               
             
           </h1>
@@ -328,7 +330,7 @@
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:38" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:35:28" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -366,18 +368,34 @@
       
 
       
-        <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
-<p>将会使用默认值配置;</p>
+        <blockquote>
+<p>本文为《CSS 设计指南（第 3 版）》阅读笔记</p>
+</blockquote>
+<ul>
+<li>继承</li>
+<li>层叠</li>
+<li>特指</li>
+</ul>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><ul>
+<li>CSS 中有很多属性是<strong>可以继承</strong>的，其中相当一部分都跟文本有关，比如颜色、字体、字号。</li>
+<li>也有很多 CSS 属性<strong>不能继承</strong>，因为继承这些属性没有意义。这些不能继承的属性主要涉及元素盒子的定位和显示方式，比如边框、外边距、内边距</li>
+</ul>
 <a id="more"></a>
-<h4 id="如何修改默认值"><a href="#如何修改默认值" class="headerlink" title="如何修改默认值?"></a>如何修改默认值?</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> init.author.email <span class="string">"lhongda@live.com"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.author.name <span class="string">"anderson"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.author.url <span class="string">"http://github.com/peacesky"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.license <span class="string">"MIT"</span></span><br><span class="line">npm config <span class="built_in">set</span> init.version <span class="string">"0.1.0"</span></span><br></pre></td></tr></table></figure>
-<h4 id="npm-run-的实际执行过程"><a href="#npm-run-的实际执行过程" class="headerlink" title="npm run 的实际执行过程:"></a>npm run 的实际执行过程:</h4><ol>
-<li>从 package.json 文件中读取 scripts 对象里面的全部配置；</li>
-<li>以传给 npm run 的第一个参数作为键，本例中为 xxx，在 scripts 对象里面获取对应的值作为接下来要执行的命令，如果没找到直接报错；</li>
-<li>在系统默认的 shell 中执行上述命令，系统默认 shell 通常是 bash，windows 环境下可能略有不同.</li>
-</ol>
-<h4 id="上下文的-eslint-命令从哪里来"><a href="#上下文的-eslint-命令从哪里来" class="headerlink" title="上下文的 eslint 命令从哪里来"></a>上下文的 eslint 命令从哪里来</h4><p>其实，npm 在执行指定 script 之前会把 node_modules/.bin 加到环境变量 $PATH 的前面，这意味着任何内含可执行文件的 npm 依赖都可以在 npm script 中直接调用，换句话说，你不需要在 npm script 中加上可执行文件的完整路径，比如 <code>./node_modules/.bin/eslint **.js</code> .</p>
-<h4 id="Cli-初始化-eslint"><a href="#Cli-初始化-eslint" class="headerlink" title="Cli 初始化 eslint"></a>Cli 初始化 eslint</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">➜  npm-custom-init git:(master) ✗ npm install eslint -D</span><br><span class="line">➜  npm-custom-init git:(master) ✗ ./node_modules/.bin/eslint --init</span><br><span class="line">? How would you like to configure ESLint? Answer questions about your style</span><br><span class="line">? Are you using ECMAScript 6 features? Yes</span><br><span class="line">? Are you using ES6 modules? Yes</span><br><span class="line">? Where will your code run? Browser</span><br><span class="line">? Do you use CommonJS? No</span><br><span class="line">? Do you use JSX? No</span><br><span class="line">? What style of indentation <span class="keyword">do</span> you use? Tabs</span><br><span class="line">? What quotes <span class="keyword">do</span> you use <span class="keyword">for</span> strings? Single</span><br><span class="line">? What line endings <span class="keyword">do</span> you use? Unix</span><br><span class="line">? Do you require semicolons? Yes</span><br><span class="line">? What format <span class="keyword">do</span> you want your config file to be <span class="keyword">in</span>? JavaScript</span><br><span class="line">Successfully created .eslintrc.js file <span class="keyword">in</span> /Users/anderson/Code/lang-experiments/js/npm/npm-custom-init</span><br></pre></td></tr></table></figure>
-<h4 id="配置-Vue-React-eslint"><a href="#配置-Vue-React-eslint" class="headerlink" title="配置 Vue/React eslint"></a>配置 Vue/React eslint</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/vuejs/eslint-plugin-vue</span><br><span class="line">https://github.com/yannickcr/eslint-plugin-react</span><br></pre></td></tr></table></figure>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>举个例子吧，假设我们想创建一个边栏，在其中放一组链接。为此，我们用 nav 元素嵌套该组链接，并给 nav 应用了一种字号和一个边框效果，比如 2 像素宽的红色边框。不难想象，nav 中的所有链接都继承它的字号很正常，<strong>可要是也继承它的边框就不合适了</strong>。当然，这些链接不会继承边框效果，因为<strong>border 属性不能继承</strong>。</p>
+<h4 id="可能存在的坑"><a href="#可能存在的坑" class="headerlink" title="可能存在的坑"></a>可能存在的坑</h4><p>由于字体和文本样式是可以继承的，所以在使用相对字体单位（如百分比和 em）时要格外小心。如果某个标签的字体大小被设置为 80%，而它的一个后代的字体大小也被设置为 80%，那么该后代中文本最终的字体大小将是<strong>64%（80%的 80%）</strong>。这有时候可能并不是你想要的结果。第 4 章我们会详细介绍绝对和相对大小的利弊。</p>
+<h3 id="层叠"><a href="#层叠" class="headerlink" title="层叠"></a>层叠</h3><p><strong>浏览器有一个默认的样式表，</strong>因为你还没有写一行 CSS 呢，每个标签已经带了一定的样式。h1 是不是粗体，字号还挺大？em 是不是斜体？列表呢，是不是缩进而且还带项目符号或编号？</p>
+<ul>
+<li><strong>浏览器样式表</strong></li>
+<li><strong>用户样式表</strong>，没错，用户也可以提供样式表，尽管这样的用户不多见。这个选择对于视障用户很有用，他们可以通过用户样式表，强制浏览器加载的所有网站都以更大的字号，更容易分辨的颜色显示内容。</li>
+<li><strong>作者样式表：</strong><ul>
+<li>链接样式（按照它们链接到页面的先后顺序）</li>
+<li>嵌入样式</li>
+<li>行内样式</li>
+</ul>
+</li>
+</ul>
+<p>样式层叠顺序：</p>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1524134444834-8dd0d915-0a33-4761-a4e6-8e7612ca8db2.png" alt="图片.png | center | 406x246"></p>
 
       
     </div>
@@ -398,9 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/npm/" rel="tag"># npm</a>
-          
-            <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+            <a href="/tags/css/" rel="tag"># css</a>
           
         </div>
       
@@ -413,13 +429,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/05/08/vue-mixin/" rel="next" title="Vue代码复用之混合(Mixin)">
+                <i class="fa fa-chevron-left"></i> Vue代码复用之混合(Mixin)
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/08/Use webpack/" rel="prev" title="为什么要使用Webpack">
+              <a href="/2018/05/08/Why use Webpack/" rel="prev" title="为什么要使用Webpack">
                 为什么要使用Webpack <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -558,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#npm-快速初始化"><span class="nav-number">1.</span> <span class="nav-text">npm 快速初始化:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何修改默认值"><span class="nav-number">2.</span> <span class="nav-text">如何修改默认值?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#npm-run-的实际执行过程"><span class="nav-number">3.</span> <span class="nav-text">npm run 的实际执行过程:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上下文的-eslint-命令从哪里来"><span class="nav-number">4.</span> <span class="nav-text">上下文的 eslint 命令从哪里来</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cli-初始化-eslint"><span class="nav-number">5.</span> <span class="nav-text">Cli 初始化 eslint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-Vue-React-eslint"><span class="nav-number">6.</span> <span class="nav-text">配置 Vue/React eslint</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#例子"><span class="nav-number">1.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可能存在的坑"><span class="nav-number">1.2.</span> <span class="nav-text">可能存在的坑</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#层叠"><span class="nav-number">2.</span> <span class="nav-text">层叠</span></a></li></ol></div>
             
 
           </div>

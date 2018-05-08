@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记  同时选中多个1234a,p &amp;#123;  color: red;&amp;#125; 12&amp;lt;a&amp;gt; I am red. &amp;lt;/a&amp;gt;&amp;lt;p&amp;gt; I am red too. &amp;lt;/p&amp;gt;">
+<meta name="keywords" content="css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS选择符">
+<meta property="og:url" content="http://peacesky.cn/2018/05/08/css-selector/index.html">
+<meta property="og:site_name" content="Peacesky">
+<meta property="og:description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记  同时选中多个1234a,p &amp;#123;  color: red;&amp;#125; 12&amp;lt;a&amp;gt; I am red. &amp;lt;/a&amp;gt;&amp;lt;p&amp;gt; I am red too. &amp;lt;/p&amp;gt;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524128006135-a3382a3a-8c0c-4bce-ad25-6ce6661dc105.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524130512933-f904c0c1-67c2-4467-8f4d-89163d7a7c3d.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524131124278-326bc389-dad1-4d66-8886-a0302ada9714.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524132621592-451f886e-a340-45f3-b463-67f1da5132d2.png">
+<meta property="og:updated_time" content="2018-05-08T09:34:12.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS选择符">
+<meta name="twitter:description" content="本文为《CSS 设计指南（第 3 版）》阅读笔记  同时选中多个1234a,p &amp;#123;  color: red;&amp;#125; 12&amp;lt;a&amp;gt; I am red. &amp;lt;/a&amp;gt;&amp;lt;p&amp;gt; I am red too. &amp;lt;/p&amp;gt;">
+<meta name="twitter:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1524128006135-a3382a3a-8c0c-4bce-ad25-6ce6661dc105.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://peacesky.cn/2018/05/08/css-selector/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CSS选择符 | Peacesky</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peacesky</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Under the peace sky.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/css-selector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CSS选择符
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:34:12" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文为《CSS 设计指南（第 3 版）》阅读笔记</p>
+</blockquote>
+<h2 id="同时选中多个"><a href="#同时选中多个" class="headerlink" title="同时选中多个"></a>同时选中多个</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">a</span>,</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span> I am red. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> I am red too. <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="后代组合式选择符-Descendant-combinator-selector"><a href="#后代组合式选择符-Descendant-combinator-selector" class="headerlink" title="后代组合式选择符(Descendant combinator selector)"></a>后代组合式选择符(Descendant combinator selector)</h2><p>tag1 tag2 中, tag2 可以是 tag1 的任意后代,不需要是直接第二代.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">article</span> <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span>&gt;</span> Hello <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span> Foo Bar <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="子选择符-gt"><a href="#子选择符-gt" class="headerlink" title="子选择符 &gt;"></a>子选择符 &gt;</h3><p>tag1 &gt; tag2 中, tag1 必须是 tag2 的父元素,不能说祖父元素或更高的.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">section</span> &gt; <span class="selector-tag">h2</span> &#123;</span><br><span class="line">  <span class="attribute">font-style</span>: italic;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="紧邻同胞选择符"><a href="#紧邻同胞选择符" class="headerlink" title="紧邻同胞选择符 +"></a>紧邻同胞选择符 +</h3><p>tag1 + tag2 tag2 必须紧跟在 tag1 后面</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h2</span> + <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">font-variant</span>: small-caps;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 只有第一个p样式改变 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>World<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Tom<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="一般同胞选择符"><a href="#一般同胞选择符" class="headerlink" title="一般同胞选择符 ~"></a>一般同胞选择符 ~</h3><p>tag1 ~ tag2 中,tag2 必须跟(不一定紧跟)在 tag1 后面;</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h2</span> ~ <span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Both a will be red --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>World<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>Tom<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="通用选择符"><a href="#通用选择符" class="headerlink" title="通用选择符 *"></a>通用选择符 *</h3><p>匹配任何元素</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 将会导致所有元素的文本和边框都变成绿色</span><br><span class="line">* &#123;</span><br><span class="line">  <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用来匹配 tag 底下的所有元素:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 将p包含的所有元素的文本变成红色</span><br><span class="line"><span class="selector-tag">p</span> * &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用来构成 <strong>非子选择符</strong> :</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">section</span> * <span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.3em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span>I am not change.<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span>&gt;</span>I was changed.<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="ID-和类选择符"><a href="#ID-和类选择符" class="headerlink" title="ID 和类选择符"></a>ID 和类选择符</h2><p>id 和 class <strong>不能以数字或特殊符号开头</strong> .</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.text-one</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 标签带类选择符</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.text-two</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">'text-one'</span>&gt;</span></span><br><span class="line">    I'm red.</span><br><span class="line"><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"text-two"</span>&gt;</span> I'm green. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"text-two"</span>&gt;</span> I'm not green. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="多类选择符"><a href="#多类选择符" class="headerlink" title="多类选择符"></a>多类选择符</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.text-a</span><span class="selector-class">.text-b</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">120%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"text-a text-b"</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="ID-属性"><a href="#ID-属性" class="headerlink" title="ID 属性"></a>ID 属性</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#text-a</span>,</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-id">#text-a</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"text-a"</span>&gt;</span> I am red. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"text-a"</span>&gt;</span> I am red too. <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="属性选择符"><a href="#属性选择符" class="headerlink" title="属性选择符"></a>属性选择符</h2><h2 id="属性名选择符"><a href="#属性名选择符" class="headerlink" title="属性名选择符"></a>属性名选择符</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[title]</span> &#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">2px</span> solid blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- <span class="doctag">Note:</span> alt will show when image not load. title will tips when hover --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"images/yellow_flower.jpg"</span> <span class="attr">title</span>=<span class="string">"yellow flower"</span> <span class="attr">alt</span>=<span class="string">"yellow flower"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="属性值选择符"><a href="#属性值选择符" class="headerlink" title="属性值选择符"></a>属性值选择符</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">img</span><span class="selector-attr">[title="red flower"]</span> &#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">4px</span> solid green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h2><ul>
+<li>UI 伪类<ul>
+<li>会在 HTML 元素处于某个状态时（比如鼠标指针位于链接上），为该元素应用 CSS 样式。</li>
+</ul>
+</li>
+<li>结构化伪类<ul>
+<li>会在标记中存在某种结构上的关系时（如某个元素是一组元素中的第一个或最后一个），为相应元素应用 CSS 样式。</li>
+</ul>
+</li>
+</ul>
+<h3 id="UI-伪类"><a href="#UI-伪类" class="headerlink" title="UI 伪类"></a>UI 伪类</h3><h4 id="链接伪类"><a href="#链接伪类" class="headerlink" title="链接伪类"></a>链接伪类</h4><p>状态:</p>
+<ul>
+<li>Link - 此时，链接就在那儿等着用户点击。</li>
+<li>Visited - 用户此前点击过这个链接。</li>
+<li>Hover - 鼠标指针正悬停在链接上。</li>
+<li>Active - 链接正在被点击（鼠标在元素上按下，还没有释放）。伪类选择符:</li>
+<li><code>a:link { color:black; }</code></li>
+<li><code>a:visited { color: gray; }</code></li>
+<li><code>a:hover { text-decoration:none }</code></li>
+<li><code>a:active { color:red };</code></li>
+</ul>
+<h4 id="focus-伪类"><a href="#focus-伪类" class="headerlink" title=":focus 伪类"></a>:focus 伪类</h4><p><code>e:focus</code> =&gt; e 表示任何元素,比如 p, h1, section 等</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">input</span><span class="selector-pseudo">:focus</span> &#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会在光标位于 input 字段中时，为该字段添加一个蓝色边框。这样可以让用户明确地知道输入的字符会出现在哪里。</p>
+<h4 id="target-伪类"><a href="#target-伪类" class="headerlink" title=":target 伪类"></a>:target 伪类</h4><p><code>e:target</code><br>如果用户点击一个指向页面中其他元素的链接，则那个元素就是目标（target），可以用:target 伪类选中它。对于下面这个链接</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#more_info"</span>&gt;</span>More Information<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>位于页面其他地方、ID 为 <code>more_info</code> 的那个元素就是目标。该元素可能是这样的:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">id</span>=<span class="string">"more_info"</span>&gt;</span>This is the information you are looking for.<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>那么，如下 CSS 规则</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#more_info</span><span class="selector-pseudo">:target</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#eee</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会在用户单击链接转向 ID 为 <code>more_info</code> 的元素时，为该元素添加浅灰色背景。</p>
+<p>维基百科的例子:</p>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1524128006135-a3382a3a-8c0c-4bce-ad25-6ce6661dc105.png" alt="图片.png | left | 656x331"></p>
+<h3 id="结构化伪类"><a href="#结构化伪类" class="headerlink" title="结构化伪类"></a>结构化伪类</h3><p>结构化伪类可以根据标记的结构应用样式，比如根据某元素的父元素或前面的同胞元素是什么。</p>
+<h4 id="first-child-和-last-child"><a href="#first-child-和-last-child" class="headerlink" title=":first-child 和 :last-child"></a>:first-child 和 :last-child</h4><p><code>e:first-child</code> 代表一组同胞元素中的第一个元素，而 <code>:last-child</code> 则代表最后一个。比如，把下面的规则:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ol</span><span class="selector-class">.results</span> <span class="selector-tag">li</span><span class="selector-pseudo">:first-child</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>应用给以下标记:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">class</span>=<span class="string">"results"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>My Fast Pony<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Steady Trotter<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Slow Ol' Nag<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>文本 <code>“My Fast Pony”</code> 就会变成蓝色。如果选择符改成这样：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ol</span><span class="selector-class">.results</span> <span class="selector-tag">li</span><span class="selector-pseudo">:last-child</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那变成红色的文本就是 <code>“Slow Ol&#39; Nag”</code> 了。</p>
+<h4 id="nth-child"><a href="#nth-child" class="headerlink" title=":nth-child"></a>:nth-child</h4><p>e 表示元素名，n 表示一个数值（也可以使用 odd 或 even）。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">li</span>: <span class="selector-tag">nth-child</span>(3);</span><br></pre></td></tr></table></figure>
+<p>会选择一组列表项中的每个第三项。(第一个子元素的下标是 1)</p>
+<h3 id="伪元素"><a href="#伪元素" class="headerlink" title="伪元素"></a>伪元素</h3><h4 id="first-letter-伪元素"><a href="#first-letter-伪元素" class="headerlink" title="::first-letter 伪元素"></a>::first-letter 伪元素</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-letter</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">300%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    Hello World!</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果不用伪元素创建这个首字符放大效果，必须手工给该字母加上 <code>&lt;span&gt;</code> 标签，然后再为该标签应用样式。而伪元素实际上是替我们添加了无形的标签。</p>
+</blockquote>
+<h4 id="first-line-伪元素"><a href="#first-line-伪元素" class="headerlink" title="::first-line 伪元素"></a>::first-line 伪元素</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-pseudo">::first-line</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    Hello! I should be red.</span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span>/&gt;</span>Hello World!</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1524130512933-f904c0c1-67c2-4467-8f4d-89163d7a7c3d.png" alt="图片.png | center | 399x129"></h4><h4 id="before-和-after-伪元素"><a href="#before-和-after-伪元素" class="headerlink" title="::before 和::after 伪元素"></a>::before 和::after 伪元素</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-class">.age</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">"Age: "</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.age</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">"years"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1524131124278-326bc389-dad1-4d66-8886-a0302ada9714.png" alt="图片.png | center | 222x69"></p>
+<blockquote>
+<p><strong>Note:</strong> 搜索引擎不会取得伪元素的信息（因为它在标记中并不存在）。因此，<strong>不要通过伪元素添加你想让搜索引擎索引的重要内容。</strong></p>
+</blockquote>
+<h4 id="selection-伪元素"><a href="#selection-伪元素" class="headerlink" title="::selection 伪元素"></a>::selection 伪元素</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">::selection</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">  <span class="attribute">background</span>: yellow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1524132621592-451f886e-a340-45f3-b463-67f1da5132d2.png" alt="图片.png | center | 237x221"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag"># css</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/08/Why use Webpack/" rel="next" title="为什么要使用Webpack">
+                <i class="fa fa-chevron-left"></i> 为什么要使用Webpack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/08/About js package manager/" rel="prev" title="关于包管理器你应该知道的">
+                关于包管理器你应该知道的 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Anderson</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#同时选中多个"><span class="nav-number">1.</span> <span class="nav-text">同时选中多个</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后代组合式选择符-Descendant-combinator-selector"><span class="nav-number">2.</span> <span class="nav-text">后代组合式选择符(Descendant combinator selector)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子选择符-gt"><span class="nav-number">2.1.</span> <span class="nav-text">子选择符 &gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#紧邻同胞选择符"><span class="nav-number">2.2.</span> <span class="nav-text">紧邻同胞选择符 +</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般同胞选择符"><span class="nav-number">2.3.</span> <span class="nav-text">一般同胞选择符 ~</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通用选择符"><span class="nav-number">2.4.</span> <span class="nav-text">通用选择符 *</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ID-和类选择符"><span class="nav-number">3.</span> <span class="nav-text">ID 和类选择符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多类选择符"><span class="nav-number">3.1.</span> <span class="nav-text">多类选择符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID-属性"><span class="nav-number">3.2.</span> <span class="nav-text">ID 属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性选择符"><span class="nav-number">4.</span> <span class="nav-text">属性选择符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性名选择符"><span class="nav-number">5.</span> <span class="nav-text">属性名选择符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性值选择符"><span class="nav-number">5.1.</span> <span class="nav-text">属性值选择符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伪类"><span class="nav-number">6.</span> <span class="nav-text">伪类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UI-伪类"><span class="nav-number">6.1.</span> <span class="nav-text">UI 伪类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链接伪类"><span class="nav-number">6.1.1.</span> <span class="nav-text">链接伪类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#focus-伪类"><span class="nav-number">6.1.2.</span> <span class="nav-text">:focus 伪类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#target-伪类"><span class="nav-number">6.1.3.</span> <span class="nav-text">:target 伪类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结构化伪类"><span class="nav-number">6.2.</span> <span class="nav-text">结构化伪类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#first-child-和-last-child"><span class="nav-number">6.2.1.</span> <span class="nav-text">:first-child 和 :last-child</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nth-child"><span class="nav-number">6.2.2.</span> <span class="nav-text">:nth-child</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伪元素"><span class="nav-number">6.3.</span> <span class="nav-text">伪元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#first-letter-伪元素"><span class="nav-number">6.3.1.</span> <span class="nav-text">::first-letter 伪元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#first-line-伪元素"><span class="nav-number">6.3.2.</span> <span class="nav-text">::first-line 伪元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#"><span class="nav-number">6.3.3.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#before-和-after-伪元素"><span class="nav-number">6.3.4.</span> <span class="nav-text">::before 和::after 伪元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#selection-伪元素"><span class="nav-number">6.3.5.</span> <span class="nav-text">::selection 伪元素</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anderson</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
