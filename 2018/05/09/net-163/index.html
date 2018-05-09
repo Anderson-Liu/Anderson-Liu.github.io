@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="歌曲id 歌曲名 评论数     186016 晴天 2127580   411214279 雅俗共赏 1920788   531051217 等你下课 (with 杨瑞代) 1030946   501133611 Look What You Made Me Do 679718   29947420 Fade 622978   418603077 告白气球 388036   52325111">
+<meta name="keywords" content="数据挖掘,爬虫,网易云音乐">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网易云音乐高评论音乐挖掘(一)">
+<meta property="og:url" content="http://peacesky.cn/2018/05/09/net-163/index.html">
+<meta property="og:site_name" content="Peacesky">
+<meta property="og:description" content="歌曲id 歌曲名 评论数     186016 晴天 2127580   411214279 雅俗共赏 1920788   531051217 等你下课 (with 杨瑞代) 1030946   501133611 Look What You Made Me Do 679718   29947420 Fade 622978   418603077 告白气球 388036   52325111">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-09T04:11:10.765Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网易云音乐高评论音乐挖掘(一)">
+<meta name="twitter:description" content="歌曲id 歌曲名 评论数     186016 晴天 2127580   411214279 雅俗共赏 1920788   531051217 等你下课 (with 杨瑞代) 1030946   501133611 Look What You Made Me Do 679718   29947420 Fade 622978   418603077 告白气球 388036   52325111">
+
+
+
+
+
+
+  <link rel="canonical" href="http://peacesky.cn/2018/05/09/net-163/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>网易云音乐高评论音乐挖掘(一) | Peacesky</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peacesky</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Under the peace sky.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/09/net-163/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网易云音乐高评论音乐挖掘(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-09 00:00:00 / Modified: 12:11:10" itemprop="dateCreated datePublished" datetime="2018-05-09T00:00:00+08:00">2018-05-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <table>
+<thead>
+<tr>
+<th style="text-align:center">歌曲id</th>
+<th style="text-align:center">歌曲名</th>
+<th style="text-align:center">评论数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">186016</td>
+<td style="text-align:center">晴天</td>
+<td style="text-align:center">2127580</td>
+</tr>
+<tr>
+<td style="text-align:center">411214279</td>
+<td style="text-align:center">雅俗共赏</td>
+<td style="text-align:center">1920788</td>
+</tr>
+<tr>
+<td style="text-align:center">531051217</td>
+<td style="text-align:center">等你下课 (with 杨瑞代)</td>
+<td style="text-align:center">1030946</td>
+</tr>
+<tr>
+<td style="text-align:center">501133611</td>
+<td style="text-align:center">Look What You Made Me Do</td>
+<td style="text-align:center">679718</td>
+</tr>
+<tr>
+<td style="text-align:center">29947420</td>
+<td style="text-align:center">Fade</td>
+<td style="text-align:center">622978</td>
+</tr>
+<tr>
+<td style="text-align:center">418603077</td>
+<td style="text-align:center">告白气球</td>
+<td style="text-align:center">388036</td>
+</tr>
+<tr>
+<td style="text-align:center">523251118</td>
+<td style="text-align:center">说散就散</td>
+<td style="text-align:center">382599</td>
+</tr>
+<tr>
+<td style="text-align:center">139774</td>
+<td style="text-align:center">The truth that you leave</td>
+<td style="text-align:center">380587</td>
+</tr>
+<tr>
+<td style="text-align:center">471385043</td>
+<td style="text-align:center">暧昧</td>
+<td style="text-align:center">373784</td>
+</tr>
+<tr>
+<td style="text-align:center">436514312</td>
+<td style="text-align:center">成都</td>
+<td style="text-align:center">373692</td>
+</tr>
+<tr>
+<td style="text-align:center">461525011</td>
+<td style="text-align:center">起风了（Cover 高橋優）</td>
+<td style="text-align:center">367351</td>
+</tr>
+<tr>
+<td style="text-align:center">29759733</td>
+<td style="text-align:center">可乐</td>
+<td style="text-align:center">367063</td>
+</tr>
+<tr>
+<td style="text-align:center">392605</td>
+<td style="text-align:center">祝你生日快乐</td>
+<td style="text-align:center">341099</td>
+</tr>
+<tr>
+<td style="text-align:center">468513829</td>
+<td style="text-align:center">说散就散</td>
+<td style="text-align:center">328117</td>
+</tr>
+<tr>
+<td style="text-align:center">31445772</td>
+<td style="text-align:center">理想三旬</td>
+<td style="text-align:center">318319</td>
+</tr>
+<tr>
+<td style="text-align:center">27646205</td>
+<td style="text-align:center">安和桥</td>
+<td style="text-align:center">308234</td>
+</tr>
+<tr>
+<td style="text-align:center">515803379</td>
+<td style="text-align:center">别</td>
+<td style="text-align:center">300010</td>
+</tr>
+<tr>
+<td style="text-align:center">439915614</td>
+<td style="text-align:center">刚好遇见你</td>
+<td style="text-align:center">298038</td>
+</tr>
+<tr>
+<td style="text-align:center">483671599</td>
+<td style="text-align:center">追光者</td>
+<td style="text-align:center">261708</td>
+</tr>
+<tr>
+<td style="text-align:center">480580003</td>
+<td style="text-align:center">再也没有</td>
+<td style="text-align:center">256887</td>
+</tr>
+<tr>
+<td style="text-align:center">32507038</td>
+<td style="text-align:center">演员</td>
+<td style="text-align:center">249606</td>
+</tr>
+<tr>
+<td style="text-align:center">437250607</td>
+<td style="text-align:center">我的一个道姑朋友（cover タイナカ 彩智）（Cover Lon）</td>
+<td style="text-align:center">248790</td>
+</tr>
+<tr>
+<td style="text-align:center">31654455</td>
+<td style="text-align:center">Victory</td>
+<td style="text-align:center">231134</td>
+</tr>
+<tr>
+<td style="text-align:center">27759600</td>
+<td style="text-align:center">Five Hundred Miles</td>
+<td style="text-align:center">229819</td>
+</tr>
+<tr>
+<td style="text-align:center">29850531</td>
+<td style="text-align:center">不找了</td>
+<td style="text-align:center">229266</td>
+</tr>
+<tr>
+<td style="text-align:center">38576323</td>
+<td style="text-align:center">春风十里</td>
+<td style="text-align:center">228297</td>
+</tr>
+<tr>
+<td style="text-align:center">355992</td>
+<td style="text-align:center">追梦赤子心</td>
+<td style="text-align:center">220875</td>
+</tr>
+<tr>
+<td style="text-align:center">513791211</td>
+<td style="text-align:center">广东十年爱情故事</td>
+<td style="text-align:center">218029</td>
+</tr>
+<tr>
+<td style="text-align:center">432506345</td>
+<td style="text-align:center">童话镇</td>
+<td style="text-align:center">216220</td>
+</tr>
+<tr>
+<td style="text-align:center">36990266</td>
+<td style="text-align:center">Faded</td>
+<td style="text-align:center">214593</td>
+</tr>
+<tr>
+<td style="text-align:center">28285910</td>
+<td style="text-align:center">岁月神偷</td>
+<td style="text-align:center">212304</td>
+</tr>
+<tr>
+<td style="text-align:center">461347998</td>
+<td style="text-align:center">Something Just Like This</td>
+<td style="text-align:center">200899</td>
+</tr>
+<tr>
+<td style="text-align:center">551816010</td>
+<td style="text-align:center">我们</td>
+<td style="text-align:center">197396</td>
+</tr>
+<tr>
+<td style="text-align:center">186001</td>
+<td style="text-align:center">七里香</td>
+<td style="text-align:center">192229</td>
+</tr>
+<tr>
+<td style="text-align:center">516657051</td>
+<td style="text-align:center">像风一样</td>
+<td style="text-align:center">189958</td>
+</tr>
+<tr>
+<td style="text-align:center">2919622</td>
+<td style="text-align:center">I Am You</td>
+<td style="text-align:center">188941</td>
+</tr>
+<tr>
+<td style="text-align:center">474567044</td>
+<td style="text-align:center">我害怕</td>
+<td style="text-align:center">185194</td>
+</tr>
+<tr>
+<td style="text-align:center">417859631</td>
+<td style="text-align:center">我好像在哪见过你</td>
+<td style="text-align:center">184845</td>
+</tr>
+<tr>
+<td style="text-align:center">516076896</td>
+<td style="text-align:center">纸短情长（完整版）</td>
+<td style="text-align:center">182612</td>
+</tr>
+<tr>
+<td style="text-align:center">466122271</td>
+<td style="text-align:center">高尚</td>
+<td style="text-align:center">182390</td>
+</tr>
+<tr>
+<td style="text-align:center">468517654</td>
+<td style="text-align:center">动物世界</td>
+<td style="text-align:center">182352</td>
+</tr>
+<tr>
+<td style="text-align:center">33035611</td>
+<td style="text-align:center">Time</td>
+<td style="text-align:center">177528</td>
+</tr>
+<tr>
+<td style="text-align:center">412902689</td>
+<td style="text-align:center">初学者</td>
+<td style="text-align:center">177211</td>
+</tr>
+<tr>
+<td style="text-align:center">421423806</td>
+<td style="text-align:center">小半</td>
+<td style="text-align:center">177020</td>
+</tr>
+<tr>
+<td style="text-align:center">440353010</td>
+<td style="text-align:center">#Lov3 #Ngẫu Hứng</td>
+<td style="text-align:center">169682</td>
+</tr>
+<tr>
+<td style="text-align:center">465920905</td>
+<td style="text-align:center">全部都是你</td>
+<td style="text-align:center">167654</td>
+</tr>
+<tr>
+<td style="text-align:center">27955653</td>
+<td style="text-align:center">你还要我怎样</td>
+<td style="text-align:center">166046</td>
+</tr>
+<tr>
+<td style="text-align:center">25706282</td>
+<td style="text-align:center">夜空中最亮的星</td>
+<td style="text-align:center">163710</td>
+</tr>
+<tr>
+<td style="text-align:center">33211676</td>
+<td style="text-align:center">Hello</td>
+<td style="text-align:center">162691</td>
+</tr>
+<tr>
+<td style="text-align:center">514761281</td>
+<td style="text-align:center">白羊</td>
+<td style="text-align:center">161552</td>
+</tr>
+<tr>
+<td style="text-align:center">4153366</td>
+<td style="text-align:center">Numb</td>
+<td style="text-align:center">160794</td>
+</tr>
+<tr>
+<td style="text-align:center">30953009</td>
+<td style="text-align:center">See You Again</td>
+<td style="text-align:center">159465</td>
+</tr>
+<tr>
+<td style="text-align:center">38592976</td>
+<td style="text-align:center">Dream It Possible</td>
+<td style="text-align:center">158987</td>
+</tr>
+<tr>
+<td style="text-align:center">287035</td>
+<td style="text-align:center">遇见</td>
+<td style="text-align:center">158105</td>
+</tr>
+<tr>
+<td style="text-align:center">415792881</td>
+<td style="text-align:center">刚刚好</td>
+<td style="text-align:center">155260</td>
+</tr>
+<tr>
+<td style="text-align:center">202373</td>
+<td style="text-align:center">南方姑娘</td>
+<td style="text-align:center">153725</td>
+</tr>
+<tr>
+<td style="text-align:center">468176711</td>
+<td style="text-align:center">城南花已开</td>
+<td style="text-align:center">145067</td>
+</tr>
+<tr>
+<td style="text-align:center">32192436</td>
+<td style="text-align:center">绅士</td>
+<td style="text-align:center">144976</td>
+</tr>
+<tr>
+<td style="text-align:center">489506275</td>
+<td style="text-align:center">非酋</td>
+<td style="text-align:center">141245</td>
+</tr>
+<tr>
+<td style="text-align:center">472361096</td>
+<td style="text-align:center">Despacito (Remix)</td>
+<td style="text-align:center">141011</td>
+</tr>
+<tr>
+<td style="text-align:center">413812448</td>
+<td style="text-align:center">大鱼</td>
+<td style="text-align:center">140808</td>
+</tr>
+<tr>
+<td style="text-align:center">30394891</td>
+<td style="text-align:center">Seve</td>
+<td style="text-align:center">140101</td>
+</tr>
+<tr>
+<td style="text-align:center">496870798</td>
+<td style="text-align:center">带你去旅行</td>
+<td style="text-align:center">138884</td>
+</tr>
+<tr>
+<td style="text-align:center">461083054</td>
+<td style="text-align:center">还不是因为你长得不好看</td>
+<td style="text-align:center">137464</td>
+</tr>
+<tr>
+<td style="text-align:center">443277013</td>
+<td style="text-align:center">火星人来过</td>
+<td style="text-align:center">134860</td>
+</tr>
+<tr>
+<td style="text-align:center">186014</td>
+<td style="text-align:center">以父之名</td>
+<td style="text-align:center">134670</td>
+</tr>
+<tr>
+<td style="text-align:center">536502758</td>
+<td style="text-align:center">离人愁</td>
+<td style="text-align:center">133536</td>
+</tr>
+<tr>
+<td style="text-align:center">31445554</td>
+<td style="text-align:center">七月上</td>
+<td style="text-align:center">133281</td>
+</tr>
+<tr>
+<td style="text-align:center">547976490</td>
+<td style="text-align:center">爱了很久的朋友</td>
+<td style="text-align:center">133111</td>
+</tr>
+<tr>
+<td style="text-align:center">412902950</td>
+<td style="text-align:center">最佳歌手</td>
+<td style="text-align:center">132559</td>
+</tr>
+<tr>
+<td style="text-align:center">401249910</td>
+<td style="text-align:center">We Don’t Talk Anymore</td>
+<td style="text-align:center">131612</td>
+</tr>
+<tr>
+<td style="text-align:center">408814900</td>
+<td style="text-align:center">借我</td>
+<td style="text-align:center">130525</td>
+</tr>
+<tr>
+<td style="text-align:center">474922552</td>
+<td style="text-align:center">我唯一青春里的路人</td>
+<td style="text-align:center">130029</td>
+</tr>
+<tr>
+<td style="text-align:center">19542337</td>
+<td style="text-align:center">Hall of Fame</td>
+<td style="text-align:center">129425</td>
+</tr>
+<tr>
+<td style="text-align:center">432509483</td>
+<td style="text-align:center">全世界谁倾听你</td>
+<td style="text-align:center">128672</td>
+</tr>
+<tr>
+<td style="text-align:center">29717271</td>
+<td style="text-align:center">Go Time</td>
+<td style="text-align:center">127924</td>
+</tr>
+<tr>
+<td style="text-align:center">34923114</td>
+<td style="text-align:center">晚安</td>
+<td style="text-align:center">127733</td>
+</tr>
+<tr>
+<td style="text-align:center">471403427</td>
+<td style="text-align:center">我喜欢上你时的内心活动</td>
+<td style="text-align:center">127533</td>
+</tr>
+<tr>
+<td style="text-align:center">486218073</td>
+<td style="text-align:center">BINGBIAN病变（prod.jurrivh）</td>
+<td style="text-align:center">124541</td>
+</tr>
+<tr>
+<td style="text-align:center">28815250</td>
+<td style="text-align:center">平凡之路</td>
+<td style="text-align:center">123282</td>
+</tr>
+<tr>
+<td style="text-align:center">36308916</td>
+<td style="text-align:center">Monody</td>
+<td style="text-align:center">122640</td>
+</tr>
+<tr>
+<td style="text-align:center">474567580</td>
+<td style="text-align:center">远走高飞</td>
+<td style="text-align:center">122569</td>
+</tr>
+<tr>
+<td style="text-align:center">371362</td>
+<td style="text-align:center">小跳蛙</td>
+<td style="text-align:center">121709</td>
+</tr>
+<tr>
+<td style="text-align:center">812400</td>
+<td style="text-align:center">PLANET</td>
+<td style="text-align:center">120996</td>
+</tr>
+<tr>
+<td style="text-align:center">33162226</td>
+<td style="text-align:center">悟空</td>
+<td style="text-align:center">119596</td>
+</tr>
+<tr>
+<td style="text-align:center">29567189</td>
+<td style="text-align:center">理想</td>
+<td style="text-align:center">119495</td>
+</tr>
+<tr>
+<td style="text-align:center">4017240</td>
+<td style="text-align:center">Intro: The Dawn</td>
+<td style="text-align:center">118185</td>
+</tr>
+<tr>
+<td style="text-align:center">28263911</td>
+<td style="text-align:center">Five Hours</td>
+<td style="text-align:center">116449</td>
+</tr>
+<tr>
+<td style="text-align:center">37653063</td>
+<td style="text-align:center">Please Don’t Go</td>
+<td style="text-align:center">115652</td>
+</tr>
+<tr>
+<td style="text-align:center">3935139</td>
+<td style="text-align:center">Breath and Life</td>
+<td style="text-align:center">114653</td>
+</tr>
+<tr>
+<td style="text-align:center">208902</td>
+<td style="text-align:center">红色高跟鞋</td>
+<td style="text-align:center">114619</td>
+</tr>
+<tr>
+<td style="text-align:center">32922450</td>
+<td style="text-align:center">IF YOU</td>
+<td style="text-align:center">114370</td>
+</tr>
+<tr>
+<td style="text-align:center">857896</td>
+<td style="text-align:center">A Little Story</td>
+<td style="text-align:center">113918</td>
+</tr>
+<tr>
+<td style="text-align:center">35476049</td>
+<td style="text-align:center">这个年纪</td>
+<td style="text-align:center">112647</td>
+</tr>
+<tr>
+<td style="text-align:center">2866921</td>
+<td style="text-align:center">Schnappi</td>
+<td style="text-align:center">112330</td>
+</tr>
+<tr>
+<td style="text-align:center">479422013</td>
+<td style="text-align:center">阿婆说</td>
+<td style="text-align:center">112273</td>
+</tr>
+<tr>
+<td style="text-align:center">308353</td>
+<td style="text-align:center">钟无艳</td>
+<td style="text-align:center">111688</td>
+</tr>
+<tr>
+<td style="text-align:center">440411424</td>
+<td style="text-align:center">缘分一道桥</td>
+<td style="text-align:center">111452</td>
+</tr>
+<tr>
+<td style="text-align:center">424264505</td>
+<td style="text-align:center">你，好不好？</td>
+<td style="text-align:center">110938</td>
+</tr>
+<tr>
+<td style="text-align:center">506196018</td>
+<td style="text-align:center">Legends Never Die-2017英雄联盟全球总决赛主题曲</td>
+<td style="text-align:center">110407</td>
+</tr>
+<tr>
+<td style="text-align:center">499274178</td>
+<td style="text-align:center">Friends</td>
+<td style="text-align:center">109836</td>
+</tr>
+<tr>
+<td style="text-align:center">4341314</td>
+<td style="text-align:center">Intro</td>
+<td style="text-align:center">109301</td>
+</tr>
+<tr>
+<td style="text-align:center">406238</td>
+<td style="text-align:center">Flower Dance</td>
+<td style="text-align:center">109161</td>
+</tr>
+<tr>
+<td style="text-align:center">25867002</td>
+<td style="text-align:center">关于郑州的记忆</td>
+<td style="text-align:center">108483</td>
+</tr>
+<tr>
+<td style="text-align:center">431357712</td>
+<td style="text-align:center">你在终点等我</td>
+<td style="text-align:center">107627</td>
+</tr>
+<tr>
+<td style="text-align:center">526464293</td>
+<td style="text-align:center">空空如也</td>
+<td style="text-align:center">107492</td>
+</tr>
+<tr>
+<td style="text-align:center">438801442</td>
+<td style="text-align:center">JULY</td>
+<td style="text-align:center">106554</td>
+</tr>
+<tr>
+<td style="text-align:center">27795934</td>
+<td style="text-align:center">Wake</td>
+<td style="text-align:center">106159</td>
+</tr>
+<tr>
+<td style="text-align:center">356034</td>
+<td style="text-align:center">Young For You</td>
+<td style="text-align:center">105940</td>
+</tr>
+<tr>
+<td style="text-align:center">29534449</td>
+<td style="text-align:center">Unity</td>
+<td style="text-align:center">105778</td>
+</tr>
+<tr>
+<td style="text-align:center">26092806</td>
+<td style="text-align:center">Take me hand</td>
+<td style="text-align:center">104879</td>
+</tr>
+<tr>
+<td style="text-align:center">3932159</td>
+<td style="text-align:center">You</td>
+<td style="text-align:center">104651</td>
+</tr>
+<tr>
+<td style="text-align:center">2740360</td>
+<td style="text-align:center">The Hampster Dance Song</td>
+<td style="text-align:center">103778</td>
+</tr>
+<tr>
+<td style="text-align:center">437292675</td>
+<td style="text-align:center">我要你</td>
+<td style="text-align:center">103517</td>
+</tr>
+<tr>
+<td style="text-align:center">451703096</td>
+<td style="text-align:center">Shape of You</td>
+<td style="text-align:center">103270</td>
+</tr>
+<tr>
+<td style="text-align:center">452986458</td>
+<td style="text-align:center">红昭愿</td>
+<td style="text-align:center">103097</td>
+</tr>
+<tr>
+<td style="text-align:center">133998</td>
+<td style="text-align:center">老街</td>
+<td style="text-align:center">102894</td>
+</tr>
+<tr>
+<td style="text-align:center">406475394</td>
+<td style="text-align:center">Wonderful U - Demo Version</td>
+<td style="text-align:center">102763</td>
+</tr>
+<tr>
+<td style="text-align:center">29436904</td>
+<td style="text-align:center">南山南</td>
+<td style="text-align:center">102196</td>
+</tr>
+<tr>
+<td style="text-align:center">449577226</td>
+<td style="text-align:center">你就不要想起我 (cover田馥甄)</td>
+<td style="text-align:center">102163</td>
+</tr>
+<tr>
+<td style="text-align:center">26508186</td>
+<td style="text-align:center">天空之城</td>
+<td style="text-align:center">102004</td>
+</tr>
+<tr>
+<td style="text-align:center">33911781</td>
+<td style="text-align:center">secret base ~ 君がくれたもの ~ (10 years after Ver.)</td>
+<td style="text-align:center">101190</td>
+</tr>
+<tr>
+<td style="text-align:center">5308028</td>
+<td style="text-align:center">My Soul</td>
+<td style="text-align:center">101105</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据挖掘/" rel="tag"># 数据挖掘</a>
+          
+            <a href="/tags/爬虫/" rel="tag"># 爬虫</a>
+          
+            <a href="/tags/网易云音乐/" rel="tag"># 网易云音乐</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/08/Why use Webpack/" rel="next" title="为什么要使用Webpack">
+                <i class="fa fa-chevron-left"></i> 为什么要使用Webpack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Anderson</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anderson</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
