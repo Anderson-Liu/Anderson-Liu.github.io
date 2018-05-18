@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="整体架构 大致分为几个部分：  Client 客户端，使用presto-client 打包的jar可执行文件 常见用法： ./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug    Coordinator节点，做一些调度工作； Discovery service节点，协助Coordinat">
+<meta name="keywords" content="presto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Presco原理解析">
+<meta property="og:url" content="http://peacesky.cn/2018/05/18/what-is-presto/index.html">
+<meta property="og:site_name" content="Peacesky">
+<meta property="og:description" content="整体架构 大致分为几个部分：  Client 客户端，使用presto-client 打包的jar可执行文件 常见用法： ./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug    Coordinator节点，做一些调度工作； Discovery service节点，协助Coordinat">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630211161-5126e378-0df2-43bb-b629-9ac8b7f90bfd.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630596374-512620e0-40d2-4dfc-a726-65dadb2f1b1e.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630749109-98df4d85-cedf-4f70-98a6-a8f0374533ad.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630772684-9577b726-31eb-40b2-8f91-d78a4993ce2b.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630814685-a237c5d3-efba-498e-ae42-dcf34b3294fe.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630834617-6cd73ef6-4f0d-4cb5-b3cb-062bebc582b5.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630899010-36326e7c-675a-4353-b6f3-2324b9748865.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630918700-817920f0-bb31-4671-b98f-d40c3972b2b8.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630962147-2796e1c7-e3f2-41d5-86f7-a2bb7e11990b.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631028631-f5cc35c4-05aa-45d3-8198-824947ffb81a.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631091219-37f95a11-3185-498d-9994-dd051fe5e085.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631121675-f427a355-d9ce-4567-8960-08568ba51874.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631275475-15f216e6-c0dc-4927-9cfe-98a2729fbb25.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631344660-a96a04b0-24f4-4b92-9a06-a45c01a2031c.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631356968-89cb8a8b-01ef-4827-b32a-21a1e2c2ccfa.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631646554-fec82a0b-6ab3-4e52-98bc-09491f8d05a9.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631665242-e8f04bb8-e922-41bd-aabf-48f37a65552f.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631693423-593dc3b6-3ed4-4767-b5cd-31b3b800d847.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631722315-78b6c6e2-33ff-4c6d-98f2-29f2baeea24a.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631747857-30526d7b-b9e5-4d4f-a63f-e4b472f32769.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631804561-d519089d-9d23-4ce8-b51c-997b9a6fc9c7.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631845318-d6cd43f4-3202-466d-9d79-a980b3bef4d9.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631879636-d08bd8b1-83c1-4081-91a8-91505bd6878a.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632115109-0655c192-f32d-490e-bffc-8a4f020c706a.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632182749-43c695fc-0174-4bf6-adfb-f3ebb4ddf0bf.png">
+<meta property="og:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632226452-414f0dbc-9963-495f-a35e-75bc157671b9.png">
+<meta property="og:updated_time" content="2018-05-18T08:31:03.454Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Presco原理解析">
+<meta name="twitter:description" content="整体架构 大致分为几个部分：  Client 客户端，使用presto-client 打包的jar可执行文件 常见用法： ./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug    Coordinator节点，做一些调度工作； Discovery service节点，协助Coordinat">
+<meta name="twitter:image" content="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630211161-5126e378-0df2-43bb-b629-9ac8b7f90bfd.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://peacesky.cn/2018/05/18/what-is-presto/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Presco原理解析 | Peacesky</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Peacesky</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Under the peace sky.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/18/what-is-presto/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Presco原理解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-18 00:00:00 / Modified: 16:31:03" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+08:00">2018-05-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a><a name="ud1pxy"></a>整体架构</h1><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630211161-5126e378-0df2-43bb-b629-9ac8b7f90bfd.png" alt="image.png | left | 747x543"></p>
+<p>大致分为几个部分：</p>
+<ul>
+<li>Client 客户端，使用<a href="https://github.com/prestodb/presto/tree/master/presto-cli" target="_blank" rel="noopener">presto-client</a> 打包的jar可执行文件<ul>
+<li>常见用法： <code>./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug</code> </li>
+</ul>
+</li>
+<li>Coordinator节点，做一些调度工作；</li>
+<li>Discovery service节点，协助Coordinator节点和Worker节点互相发现的服务；</li>
+<li>Worker节点，干活的节点。比如表扫描等工作；</li>
+<li>Connector plugin。插件化的组件，可以通过为Postgresql、Mysql等写对应的Connector实现支持presto从这些数据库中读写数据，官方已经维护了一些主流的Connector;</li>
+</ul>
+<h3 id="更具体的Connector连接图："><a href="#更具体的Connector连接图：" class="headerlink" title="更具体的Connector连接图："></a><a name="1x3xng"></a>更具体的Connector连接图：</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630596374-512620e0-40d2-4dfc-a726-65dadb2f1b1e.png" alt="image.png | left | 747x557"></p>
+<h3 id="几种典型的部署架构图"><a href="#几种典型的部署架构图" class="headerlink" title="几种典型的部署架构图"></a><a name="m56qua"></a>几种典型的部署架构图</h3><h4 id="单机版–Coordinator、Worker、Discovery-Service于一身"><a href="#单机版–Coordinator、Worker、Discovery-Service于一身" class="headerlink" title="单机版–Coordinator、Worker、Discovery Service于一身"></a><a name="mrkagt"></a>单机版–Coordinator、Worker、Discovery Service于一身</h4><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630749109-98df4d85-cedf-4f70-98a6-a8f0374533ad.png" alt="image.png | left | 747x555"></p>
+<h4 id="多个Worker版"><a href="#多个Worker版" class="headerlink" title="多个Worker版"></a><a name="4zuhgb"></a>多个Worker版</h4><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630772684-9577b726-31eb-40b2-8f91-d78a4993ce2b.png" alt="image.png | left | 747x552"></p>
+<h4 id="将Discovery-server独立出去的版本"><a href="#将Discovery-server独立出去的版本" class="headerlink" title="将Discovery server独立出去的版本"></a><a name="1gsdth"></a>将Discovery server独立出去的版本</h4><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630814685-a237c5d3-efba-498e-ae42-dcf34b3294fe.png" alt="image.png | left | 747x539"></p>
+<h4 id="高可用增强版"><a href="#高可用增强版" class="headerlink" title="高可用增强版"></a><a name="s404zl"></a>高可用增强版</h4><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630834617-6cd73ef6-4f0d-4cb5-b3cb-062bebc582b5.png" alt="image.png | left | 747x553"></p>
+<h1 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a><a name="5mqwig"></a>执行流程</h1><h2 id="各个节点互相连接"><a href="#各个节点互相连接" class="headerlink" title="各个节点互相连接"></a><a name="scedox"></a>各个节点互相连接</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630899010-36326e7c-675a-4353-b6f3-2324b9748865.png" alt="image.png | left | 747x507"></p>
+<h2 id="客户端发送请求给Coordinator"><a href="#客户端发送请求给Coordinator" class="headerlink" title="客户端发送请求给Coordinator"></a><a name="0bigdg"></a>客户端发送请求给Coordinator</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630918700-817920f0-bb31-4671-b98f-d40c3972b2b8.png" alt="image.png | left | 747x520"></p>
+<h1 id="Coordinator根据请求去找对应的Connector-plugin拿metadata"><a href="#Coordinator根据请求去找对应的Connector-plugin拿metadata" class="headerlink" title="Coordinator根据请求去找对应的Connector plugin拿metadata"></a><a name="58bxuq"></a>Coordinator根据请求去找对应的Connector plugin拿metadata</h1><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526630962147-2796e1c7-e3f2-41d5-86f7-a2bb7e11990b.png" alt="image.png | left | 747x497"></p>
+<h2 id="Coordinator生成执行计划（可以通过expain查看），调度worker"><a href="#Coordinator生成执行计划（可以通过expain查看），调度worker" class="headerlink" title="Coordinator生成执行计划（可以通过expain查看），调度worker"></a><a name="3qrvro"></a>Coordinator生成执行计划（可以通过expain查看），调度worker</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631028631-f5cc35c4-05aa-45d3-8198-824947ffb81a.png" alt="image.png | left | 747x505"></p>
+<h2 id="Worker拿到任务了，找Connector-plugin去读数据源"><a href="#Worker拿到任务了，找Connector-plugin去读数据源" class="headerlink" title="Worker拿到任务了，找Connector plugin去读数据源"></a><a name="8pzlak"></a>Worker拿到任务了，找Connector plugin去读数据源</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631091219-37f95a11-3185-498d-9994-dd051fe5e085.png" alt="image.png | left | 747x510"></p>
+<h2 id="Worker所有任务都在内存中执行（内存计算型）"><a href="#Worker所有任务都在内存中执行（内存计算型）" class="headerlink" title="Worker所有任务都在内存中执行（内存计算型）"></a><a name="1cv5ci"></a>Worker所有任务都在内存中执行（内存计算型）</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631121675-f427a355-d9ce-4567-8960-08568ba51874.png" alt="image.png | left | 747x482"></p>
+<h2 id="client从worker拿到结果"><a href="#client从worker拿到结果" class="headerlink" title="client从worker拿到结果"></a><a name="qfkosv"></a>client从worker拿到结果</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631275475-15f216e6-c0dc-4927-9cfe-98a2729fbb25.png" alt="image.png | left | 747x476"></p>
+<h1 id="支持多种Connector带来的好处"><a href="#支持多种Connector带来的好处" class="headerlink" title="支持多种Connector带来的好处"></a><a name="n6b2cg"></a>支持多种Connector带来的好处</h1><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631344660-a96a04b0-24f4-4b92-9a06-a45c01a2031c.png" alt="image.png | left | 747x537"></p>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631356968-89cb8a8b-01ef-4827-b32a-21a1e2c2ccfa.png" alt="image.png | left | 747x531"></p>
+<p>目前测试跨库数据迁移，也就是 <code>create table DB_A.foo as select * from DB_B.bar</code> 只在MongoDB中成功了，其他的都会触发异常，具体异常代码在 <code>presto/presto-main/src/main/java/com/facebook/presto/split/PageSinkManager.java</code> ，也就是Connector必须要实现 <code>ConnectorPageSinkProvider</code> 这个接口。</p>
+<h1 id="查询计划相关"><a href="#查询计划相关" class="headerlink" title="查询计划相关"></a><a name="l7xwdh"></a>查询计划相关</h1><h2 id="执行模型-和MapReduce相比较"><a href="#执行模型-和MapReduce相比较" class="headerlink" title="执行模型-和MapReduce相比较"></a><a name="8bskpf"></a>执行模型-和MapReduce相比较</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631646554-fec82a0b-6ab3-4e52-98bc-09491f8d05a9.png" alt="image.png | left | 747x440"></p>
+<p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631665242-e8f04bb8-e922-41bd-aabf-48f37a65552f.png" alt="image.png | left | 747x506"></p>
+<h2 id="查询计划示例"><a href="#查询计划示例" class="headerlink" title="查询计划示例"></a><a name="5m9dfa"></a>查询计划示例</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631693423-593dc3b6-3ed4-4767-b5cd-31b3b800d847.png" alt="image.png | left | 747x517"></p>
+<h3 id="Presto会分为多个Stage"><a href="#Presto会分为多个Stage" class="headerlink" title="Presto会分为多个Stage"></a><a name="prsybp"></a>Presto会分为多个Stage</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631722315-78b6c6e2-33ff-4c6d-98f2-29f2baeea24a.png" alt="image.png | left | 747x508"></p>
+<h3 id="并分到多个worker中去"><a href="#并分到多个worker中去" class="headerlink" title="并分到多个worker中去"></a><a name="prsybp"></a>并分到多个worker中去</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631747857-30526d7b-b9e5-4d4f-a63f-e4b472f32769.png" alt="image.png | left | 747x521"></p>
+<h2 id="每个Stage又分为多个Tasks"><a href="#每个Stage又分为多个Tasks" class="headerlink" title="每个Stage又分为多个Tasks"></a><a name="ai4fln"></a>每个Stage又分为多个Tasks</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631804561-d519089d-9d23-4ce8-b51c-997b9a6fc9c7.png" alt="image.png | left | 747x520"></p>
+<h2 id="每个Task又分为多个Split"><a href="#每个Task又分为多个Split" class="headerlink" title="每个Task又分为多个Split"></a><a name="npgska"></a>每个Task又分为多个Split</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631845318-d6cd43f4-3202-466d-9d79-a980b3bef4d9.png" alt="image.png | left | 747x525"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><a name="5swwpg"></a>总结</h2><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526631879636-d08bd8b1-83c1-4081-91a8-91505bd6878a.png" alt="image.png | left | 747x417"></p>
+<h2 id="再来一个例子"><a href="#再来一个例子" class="headerlink" title="再来一个例子"></a><a name="np1hdd"></a>再来一个例子</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> foo;</span><br></pre></td></tr></table></figure>
+<p>在两个Worker的例子中：</p>
+<h3 id="整体流程：-Stage0-Stage1"><a href="#整体流程：-Stage0-Stage1" class="headerlink" title="整体流程： Stage0 + Stage1"></a><a name="ecrxbt"></a>整体流程： Stage0 + Stage1</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632115109-0655c192-f32d-490e-bffc-8a4f020c706a.png" alt="image.png | left | 422x1510"></p>
+<h3 id="分步流程-Stage-0"><a href="#分步流程-Stage-0" class="headerlink" title="分步流程-Stage-0"></a><a name="65ungg"></a>分步流程-Stage-0</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632182749-43c695fc-0174-4bf6-adfb-f3ebb4ddf0bf.png" alt="image.png | left | 747x662"></p>
+<h3 id="分步流程-Stage-1"><a href="#分步流程-Stage-1" class="headerlink" title="分步流程-Stage-1"></a><a name="g85avt"></a>分步流程-Stage-1</h3><p><img src="https://cdn.yuque.com/yuque/0/2018/png/95485/1526632226452-414f0dbc-9963-495f-a35e-75bc157671b9.png" alt="image.png | left | 747x651"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/presto/" rel="tag"># presto</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/18/go-ethereum-rpc-getblock-explain/" rel="next" title="geth源码解读--rpc 调用getBlock()解析">
+                <i class="fa fa-chevron-left"></i> geth源码解读--rpc 调用getBlock()解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Anderson</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整体架构"><span class="nav-number">1.</span> <span class="nav-text">整体架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更具体的Connector连接图："><span class="nav-number">1.0.1.</span> <span class="nav-text">更具体的Connector连接图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#几种典型的部署架构图"><span class="nav-number">1.0.2.</span> <span class="nav-text">几种典型的部署架构图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单机版–Coordinator、Worker、Discovery-Service于一身"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">单机版–Coordinator、Worker、Discovery Service于一身</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个Worker版"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">多个Worker版</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将Discovery-server独立出去的版本"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">将Discovery server独立出去的版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高可用增强版"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">高可用增强版</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行流程"><span class="nav-number">2.</span> <span class="nav-text">执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#各个节点互相连接"><span class="nav-number">2.1.</span> <span class="nav-text">各个节点互相连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端发送请求给Coordinator"><span class="nav-number">2.2.</span> <span class="nav-text">客户端发送请求给Coordinator</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Coordinator根据请求去找对应的Connector-plugin拿metadata"><span class="nav-number">3.</span> <span class="nav-text">Coordinator根据请求去找对应的Connector plugin拿metadata</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Coordinator生成执行计划（可以通过expain查看），调度worker"><span class="nav-number">3.1.</span> <span class="nav-text">Coordinator生成执行计划（可以通过expain查看），调度worker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker拿到任务了，找Connector-plugin去读数据源"><span class="nav-number">3.2.</span> <span class="nav-text">Worker拿到任务了，找Connector plugin去读数据源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker所有任务都在内存中执行（内存计算型）"><span class="nav-number">3.3.</span> <span class="nav-text">Worker所有任务都在内存中执行（内存计算型）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#client从worker拿到结果"><span class="nav-number">3.4.</span> <span class="nav-text">client从worker拿到结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支持多种Connector带来的好处"><span class="nav-number">4.</span> <span class="nav-text">支持多种Connector带来的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询计划相关"><span class="nav-number">5.</span> <span class="nav-text">查询计划相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#执行模型-和MapReduce相比较"><span class="nav-number">5.1.</span> <span class="nav-text">执行模型-和MapReduce相比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询计划示例"><span class="nav-number">5.2.</span> <span class="nav-text">查询计划示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Presto会分为多个Stage"><span class="nav-number">5.2.1.</span> <span class="nav-text">Presto会分为多个Stage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并分到多个worker中去"><span class="nav-number">5.2.2.</span> <span class="nav-text">并分到多个worker中去</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每个Stage又分为多个Tasks"><span class="nav-number">5.3.</span> <span class="nav-text">每个Stage又分为多个Tasks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每个Task又分为多个Split"><span class="nav-number">5.4.</span> <span class="nav-text">每个Task又分为多个Split</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再来一个例子"><span class="nav-number">5.6.</span> <span class="nav-text">再来一个例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体流程：-Stage0-Stage1"><span class="nav-number">5.6.1.</span> <span class="nav-text">整体流程： Stage0 + Stage1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分步流程-Stage-0"><span class="nav-number">5.6.2.</span> <span class="nav-text">分步流程-Stage-0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分步流程-Stage-1"><span class="nav-number">5.6.3.</span> <span class="nav-text">分步流程-Stage-1</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anderson</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
