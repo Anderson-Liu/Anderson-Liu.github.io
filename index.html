@@ -282,6 +282,311 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/18/use-intellij-debug-presto/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/18/use-intellij-debug-presto/" itemprop="url">
+                  P使用Intellij idea调试presto
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-18 00:00:00 / Modified: 17:21:30" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+08:00">2018-05-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          首先clone presto源代码：1git clone https://github.com/prestodb/presto.git
+然后使用idea打开presto:
+然后idea会自动开始使用maven下载依赖。
+添加执行配置
+进一步配置
+
+After opening the project 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/18/use-intellij-debug-presto/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/18/what-is-presto/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/18/what-is-presto/" itemprop="url">
+                  Presco原理解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-18 00:00:00 / Modified: 16:39:30" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+08:00">2018-05-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          整体架构
+大致分为几个部分：
+
+Client 客户端，使用presto-client 打包的jar可执行文件
+常见用法： ./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug 
+
+
+Coor
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/18/what-is-presto/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/18/presto-connector-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -576,159 +881,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/18/what-is-presto/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/18/what-is-presto/" itemprop="url">
-                  Presco原理解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-18 00:00:00 / Modified: 16:39:30" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+08:00">2018-05-18</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          整体架构
-大致分为几个部分：
-
-Client 客户端，使用presto-client 打包的jar可执行文件
-常见用法： ./presto-cli.jar --server localhost:8080 --catalog mongodb --schema user  --debug 
-
-
-Coor
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/18/what-is-presto/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/09/net-163/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -850,6 +1002,303 @@ Look What You Made Me Do
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/09/net-163/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Why use Webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/08/Why use Webpack/" itemprop="url">
+                  为什么要使用Webpack
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:14:22" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
+<h2 id="曾经的-Web-开发的做法和缺陷："><a href="#曾经的-Web-开发的做法和缺陷：" class="headerlink" title="曾经的 Web 开发的做法和缺陷："></a>曾经的 Web 开发的做法和缺陷：</h2><ul>
+<li>在 HTML 中插入一个 script 标签，直接在里面书写代码；问题：</li>
+<li>全局作用域的污染。由于<strong>在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染</strong>。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。</li>
+<li>代码重用性差。在一个多页面应用的场景下，经常会有一些逻辑是这些页面之间共有的，此时我们不得不将这些代码复制粘贴到各个页面中。而当此处逻辑改动的时候我们也需要去更新所有页面的代码，造成很多额外的成本。</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/Why use Webpack/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/css-selector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Peacesky">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/08/css-selector/" itemprop="url">
+                  CSS选择符
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:34:12" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本文为《CSS 设计指南（第 3 版）》阅读笔记</p>
+</blockquote>
+<h2 id="同时选中多个"><a href="#同时选中多个" class="headerlink" title="同时选中多个"></a>同时选中多个</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">a</span>,</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span> I am red. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> I am red too. <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/08/css-selector/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1060,7 +1509,7 @@ Look What You Made Me Do
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Why use Webpack/">
+    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/npm-custom-init/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Anderson">
@@ -1079,8 +1528,8 @@ Look What You Made Me Do
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/08/Why use Webpack/" itemprop="url">
-                  为什么要使用Webpack
+                <a class="post-title-link" href="/2018/05/08/npm-custom-init/" itemprop="url">
+                  npm init 解析
                 </a>
               
             
@@ -1106,7 +1555,7 @@ Look What You Made Me Do
                 
               
 
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:14:22" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
+              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:38" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
             
 
             
@@ -1145,159 +1594,11 @@ Look What You Made Me Do
 
       
         
-          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
-<h2 id="曾经的-Web-开发的做法和缺陷："><a href="#曾经的-Web-开发的做法和缺陷：" class="headerlink" title="曾经的 Web 开发的做法和缺陷："></a>曾经的 Web 开发的做法和缺陷：</h2><ul>
-<li>在 HTML 中插入一个 script 标签，直接在里面书写代码；问题：</li>
-<li>全局作用域的污染。由于<strong>在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染</strong>。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。</li>
-<li>代码重用性差。在一个多页面应用的场景下，经常会有一些逻辑是这些页面之间共有的，此时我们不得不将这些代码复制粘贴到各个页面中。而当此处逻辑改动的时候我们也需要去更新所有页面的代码，造成很多额外的成本。</li>
-</ul>
+          <h4 id="npm-快速初始化"><a href="#npm-快速初始化" class="headerlink" title="npm 快速初始化:"></a>npm 快速初始化:</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -f (--force or --yes)</span><br></pre></td></tr></table></figure>
+<p>将会使用默认值配置;</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/Why use Webpack/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/About js package manager/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/About js package manager/" itemprop="url">
-                  关于包管理器你应该知道的
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:28" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code><br><strong>JavaScript 是一个缺乏标准库的语言。</strong>当你想解决 URL 处理、日期处理这类很常见的问题，在没有标准库的情况下就只能自己动手写代码或者从自己以前的工程中拷贝代码。而使用 npm 等包管理器最大的好处是里面有很多非常成熟的包来解决这类问题，可以直接安装到项目中使用，给开发工作带来了很大的便利。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/About js package manager/#more" rel="contents">
+            <a class="btn" href="/2018/05/08/npm-custom-init/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1483,300 +1784,6 @@ Look What You Made Me Do
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/css-selector/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/css-selector/" itemprop="url">
-                  CSS选择符
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:34:12" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文为《CSS 设计指南（第 3 版）》阅读笔记</p>
-</blockquote>
-<h2 id="同时选中多个"><a href="#同时选中多个" class="headerlink" title="同时选中多个"></a>同时选中多个</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">a</span>,</span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span> I am red. <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> I am red too. <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/css-selector/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://peacesky.cn/2018/05/08/Use webpack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anderson">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Peacesky">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/Use webpack/" itemprop="url">
-                  为什么要使用Webpack
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-08 10:23:37 / Modified: 17:13:54" itemprop="dateCreated datePublished" datetime="2018-05-08T10:23:37+08:00">2018-05-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><code>本文整理自GitChat居玉皓的达人课</code><a href="http://gitbook.cn/gitchat/column/59e065f64f7fbe555e479204#catalog" target="_blank" rel="noopener">《Webpack 前端工程化入门》</a><code></code></p>
-<p><img src="https://cdn.yuque.com/yuque/2018/png/95485/1523526490084-e6add3e6-1931-4581-ab12-d43e94227175.png" alt="图片.png | left | 665x347"></p>
-<p>对于 JavaScript 应用来说，现在市面上可以选择的打包和构建工具有很多：Gulp、Grunt、Browserify、Webpack、Rollup 等等。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/08/Use webpack/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1824,7 +1831,7 @@ Look What You Made Me Do
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1867,7 +1874,11 @@ Look What You Made Me Do
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
