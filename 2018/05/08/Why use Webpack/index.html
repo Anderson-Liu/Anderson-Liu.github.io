@@ -103,7 +103,7 @@
 
 
   <meta name="description" content="本文整理自GitChat居玉皓的达人课《Webpack 前端工程化入门》 曾经的 Web 开发的做法和缺陷： 在 HTML 中插入一个 script 标签，直接在里面书写代码；问题： 全局作用域的污染。由于在每个 script 标签下顶层作用域即全局作用域，直接进行变量和函数声明会造成全局命名空间污染。假如一个页面有多个 script 标签，它们之间很有可能发生命名冲突。 代码重用性差。在一个多页">
-<meta name="keywords" content="Webpack,Javascript">
+<meta name="keywords" content="Javascript,Webpack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为什么要使用Webpack">
 <meta property="og:url" content="http://peacesky.cn/2018/05/08/Why use Webpack/index.html">
@@ -398,7 +398,7 @@
 <li>解除耦合</li>
 <li>按需加载</li>
 </ul>
-<h2 id="JavaScript-模块发展简史"><a href="#JavaScript-模块发展简史" class="headerlink" title="JavaScript 模块发展简史"></a>JavaScript 模块发展简史</h2><h4 id="最原始的方式-script-标签"><a href="#最原始的方式-script-标签" class="headerlink" title="最原始的方式: script 标签"></a>最原始的方式: script 标签</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleA.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleB.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/main.js"</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="JavaScript-模块发展简史"><a href="#JavaScript-模块发展简史" class="headerlink" title="JavaScript 模块发展简史"></a>JavaScript 模块发展简史</h2><h4 id="最原始的方式-script-标签"><a href="#最原始的方式-script-标签" class="headerlink" title="最原始的方式: script 标签"></a>最原始的方式: script 标签</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleA.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/moduleB.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line">&lt;script src=<span class="string">"//mycdn.com/main.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 <p>缺陷: 这种方法的缺陷是所有这些脚本都是<strong>共用全局的作用域</strong>。在任何一个 JavaScript 文件中进行顶层作用域的变量或函数声明，都会暴露在全局中，使得其它脚本也相应获取。当应用的规模和复杂度上升，<strong>这些脚本之间很容易发生命名冲突，从而导致不可预知的问题。</strong></p>
 <h4 id="立即执行函数表达式-IIFE"><a href="#立即执行函数表达式-IIFE" class="headerlink" title="立即执行函数表达式(IIFE)"></a>立即执行函数表达式(IIFE)</h4><p>IIFE 的实现原理是把代码包裹在一个函数中，并且在声明这个函数之后立即执行它，这样相当于为代码单独创建了一个作用域。比如在下面的代码中我们创建了一个立即执行函数表达式，变量的声明处于它自己的函数作用域内，与其它的模块作用域隔离开:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// foobar 并不会暴露在全局作用域</span></span><br><span class="line">  <span class="keyword">var</span> foobar = <span class="string">"Hello IIFE!"</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(foobar);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
@@ -482,9 +482,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Webpack/" rel="tag"># Webpack</a>
-          
             <a href="/tags/Javascript/" rel="tag"># Javascript</a>
+          
+            <a href="/tags/Webpack/" rel="tag"># Webpack</a>
           
         </div>
       
@@ -497,8 +497,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/08/About js package manager/" rel="next" title="关于包管理器你应该知道的">
-                <i class="fa fa-chevron-left"></i> 关于包管理器你应该知道的
+              <a href="/2018/05/08/npm-custom-init/" rel="next" title="npm init 解析">
+                <i class="fa fa-chevron-left"></i> npm init 解析
               </a>
             
           </div>
@@ -507,8 +507,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/09/net-163/" rel="prev" title="网易云音乐高评论音乐挖掘(一)">
-                网易云音乐高评论音乐挖掘(一) <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/08/css-style-conflict/" rel="prev" title="CSS怎么解决样式冲突">
+                CSS怎么解决样式冲突 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -583,7 +583,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -616,7 +616,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">9</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
